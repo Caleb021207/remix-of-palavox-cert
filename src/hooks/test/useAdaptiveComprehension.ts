@@ -418,10 +418,12 @@ export const useAdaptiveComprehension = ({
       const combinedScore = (readingScore + listeningScore) / 2;
       
       await supabase.from('test_sessions').update({
-        is_adaptive: true,
-        adaptive_reading_level: readingFinalLevel,
-        adaptive_listening_level: listeningFinalLevel,
-        adaptive_question_count: reading.totalCount + listening.totalCount
+        metadata: {
+          is_adaptive: true,
+          adaptive_reading_level: readingFinalLevel,
+          adaptive_listening_level: listeningFinalLevel,
+          adaptive_question_count: reading.totalCount + listening.totalCount
+        }
       }).eq('id', sessionId);
       
       onComplete(combinedScore);
