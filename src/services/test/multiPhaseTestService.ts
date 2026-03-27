@@ -224,18 +224,20 @@ export async function evaluatePhaseResponses(
 
 export async function savePhaseResult(result: Omit<PhaseResult, 'id'>): Promise<string> {
   try {
+    // Store phase results in event_logs since test_phase_results doesn't exist in new schema
     const { data, error } = await supabase
-      .from('test_phase_results')
-      .insert([
-        {
-          session_id: result.sessionId,
-          phase_name: result.phase,
+      .from('event_logs')
+      .insert({
+        session_id: result.sessionId,
+        event_type: 'phase_result',
+        payload: {
+          phase: result.phase,
           score: result.score,
           responses: result.responses,
           feedback: result.feedback,
           completed_at: result.completedAt.toISOString()
-        }
-      ])
+        } as any,
+      })
       .select('id')
       .single();
 
