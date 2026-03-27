@@ -253,16 +253,22 @@ export async function updateTestSession(sessionId: string, updates: Partial<Test
   try {
     const updateData: any = {};
     
-    if (updates.currentPhase) updateData.current_phase = updates.currentPhase;
-    if (updates.phaseScores) updateData.phase_scores = updates.phaseScores;
-    if (updates.endTime) updateData.end_time = updates.endTime.toISOString();
-    if (updates.score !== undefined) updateData.score = updates.score;
-    if (updates.cefr) updateData.cefr_level = updates.cefr;
-    if (updates.actfl) updateData.actfl_level = updates.actfl;
-    if (updates.feedback) updateData.feedback = updates.feedback;
-    if (updates.subscriptionVerified !== undefined) updateData.subscription_verified = updates.subscriptionVerified;
-    if (updates.paymentStatus) updateData.payment_status = updates.paymentStatus;
-    if (updates.language) updateData.language = updates.language;
+    if (updates.endTime) updateData.completed_at = updates.endTime.toISOString();
+    if (updates.status) updateData.status = updates.status;
+    
+    // Store extended data in metadata
+    const metadata: any = {};
+    if (updates.currentPhase) metadata.current_phase = updates.currentPhase;
+    if (updates.phaseScores) metadata.phase_scores = updates.phaseScores;
+    if (updates.score !== undefined) metadata.score = updates.score;
+    if (updates.cefr) metadata.cefr_level = updates.cefr;
+    if (updates.actfl) metadata.actfl_level = updates.actfl;
+    if (updates.feedback) metadata.feedback = updates.feedback;
+    if (updates.language) metadata.language = updates.language;
+    
+    if (Object.keys(metadata).length > 0) {
+      updateData.metadata = metadata;
+    }
 
     const { error } = await supabase
       .from('test_sessions')
@@ -273,5 +279,7 @@ export async function updateTestSession(sessionId: string, updates: Partial<Test
   } catch (error) {
     console.error('Error updating test session:', error);
     throw error;
+  }
+}
   }
 }
