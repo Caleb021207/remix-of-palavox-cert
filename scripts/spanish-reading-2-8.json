@@ -1,0 +1,156 @@
+[
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "My name is Lisa. I am from London. I live with my parents and my cat. My cat's name is Fluffy. Fluffy is three years old. I am a student. I study music at the university. My favorite instrument is the piano. I practice every day for two hours. On weekends, I play in a small band with my friends.",
+      "questions": [
+        {"question_english": "Where is Lisa from?", "question_native": "¿De dónde es Lisa?", "options": ["Paris", "London", "Berlin", "Rome"], "correct_answer": 1},
+        {"question_english": "What is Lisa's cat's name?", "question_native": "¿Cómo se llama el gato de Lisa?", "options": ["Fluffy", "Whiskers", "Tiger", "Boots"], "correct_answer": 0},
+        {"question_english": "What instrument does Lisa play?", "question_native": "¿Qué instrumento toca Lisa?", "options": ["Guitar", "Violin", "Piano", "Drums"], "correct_answer": 2}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": {
+      "passage": "Pedro works in a bakery. He starts work at 5:00 AM every morning. He makes bread, cakes, and cookies. His specialty is chocolate cake. Many customers come to buy his cakes. Pedro loves his job. After work, he goes home and plays with his dog. His dog's name is Max. They walk in the park together.",
+      "questions": [
+        {"question_english": "Where does Pedro work?", "question_native": "¿Dónde trabaja Pedro?", "options": ["Restaurant", "Bakery", "School", "Hospital"], "correct_answer": 1},
+        {"question_english": "What time does Pedro start work?", "question_native": "¿A qué hora empieza Pedro a trabajar?", "options": ["5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM"], "correct_answer": 0},
+        {"question_english": "What is Pedro's dog's name?", "question_native": "¿Cómo se llama el perro de Pedro?", "options": ["Rex", "Max", "Buddy", "Charlie"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": {
+      "passage": "Sarah is ten years old. She goes to school every day. Her favorite subject is art. She likes to draw and paint. Sarah has two brothers. Their names are Tom and Jack. They play soccer together after school. On Sundays, the family goes to the park. Sarah's mother brings sandwiches for lunch.",
+      "questions": [
+        {"question_english": "How old is Sarah?", "question_native": "¿Cuántos años tiene Sarah?", "options": ["Eight", "Nine", "Ten", "Eleven"], "correct_answer": 2},
+        {"question_english": "What is Sarah's favorite subject?", "question_native": "¿Cuál es la materia favorita de Sarah?", "options": ["Math", "Science", "Art", "English"], "correct_answer": 2},
+        {"question_english": "What do they do on Sundays?", "question_native": "¿Qué hacen los domingos?", "options": ["Go to school", "Go to the park", "Watch TV", "Play video games"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": {
+      "passage": "Emma lives in a small apartment in the city. She has a beautiful balcony with many flowers. Every morning, she waters the flowers. Emma works in a library. She helps people find books. She loves reading mystery novels. In the evening, she cooks dinner and watches her favorite TV show.",
+      "questions": [
+        {"question_english": "Where does Emma live?", "question_native": "¿Dónde vive Emma?", "options": ["In a house", "In an apartment", "In a hotel", "In a dorm"], "correct_answer": 1},
+        {"question_english": "Where does Emma work?", "question_native": "¿Dónde trabaja Emma?", "options": ["School", "Hospital", "Library", "Store"], "correct_answer": 2},
+        {"question_english": "What kind of books does Emma love?", "question_native": "¿Qué tipo de libros le encantan a Emma?", "options": ["Romance", "Mystery", "Science fiction", "History"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": {
+      "passage": "David is a taxi driver. He drives people around the city every day. He knows all the streets very well. David speaks three languages: English, Spanish, and French. Many tourists take his taxi. He tells them about interesting places to visit. David enjoys meeting new people from different countries.",
+      "questions": [
+        {"question_english": "What is David's job?", "question_native": "¿Cuál es el trabajo de David?", "options": ["Bus driver", "Taxi driver", "Pilot", "Train conductor"], "correct_answer": 1},
+        {"question_english": "How many languages does David speak?", "question_native": "¿Cuántos idiomas habla David?", "options": ["Two", "Three", "Four", "Five"], "correct_answer": 1},
+        {"question_english": "Who often takes David's taxi?", "question_native": "¿Quién suele tomar el taxi de David?", "options": ["Students", "Tourists", "Doctors", "Teachers"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": {
+      "passage": "Anna works in a flower shop. She arranges beautiful bouquets every day. Her shop opens at 9:00 AM and closes at 6:00 PM. Many people buy flowers for birthdays and weddings. Anna's favorite flowers are roses. She has a small garden at home where she grows vegetables. On weekends, she visits her grandmother.",
+      "questions": [
+        {"question_english": "Where does Anna work?", "question_native": "¿Dónde trabaja Anna?", "options": ["Bakery", "Flower shop", "Restaurant", "Bookstore"], "correct_answer": 1},
+        {"question_english": "What are Anna's favorite flowers?", "question_native": "¿Cuáles son las flores favoritas de Anna?", "options": ["Tulips", "Roses", "Sunflowers", "Daisies"], "correct_answer": 1},
+        {"question_english": "What does Anna do on weekends?", "question_native": "¿Qué hace Anna los fines de semana?", "options": ["Works overtime", "Visits her grandmother", "Goes shopping", "Plays sports"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": {
+      "passage": "Carlos is a postman. He delivers letters and packages to people's homes. He starts his route early in the morning. Carlos rides a bicycle to deliver the mail. He knows everyone in the neighborhood. People often give him coffee and cookies. Carlos has worked as a postman for five years. He enjoys being outdoors.",
+      "questions": [
+        {"question_english": "What is Carlos's job?", "question_native": "¿Cuál es el trabajo de Carlos?", "options": ["Policeman", "Postman", "Fireman", "Salesman"], "correct_answer": 1},
+        {"question_english": "How does Carlos deliver mail?", "question_native": "¿Cómo entrega Carlos el correo?", "options": ["By car", "By bicycle", "By motorcycle", "On foot"], "correct_answer": 1},
+        {"question_english": "How long has Carlos been a postman?", "question_native": "¿Cuánto tiempo ha sido Carlos cartero?", "options": ["Three years", "Five years", "Seven years", "Ten years"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "Last month, Jenny traveled to Italy with her sister. They visited Rome, Florence, and Venice. In Rome, they saw the Colosseum and ate delicious pasta. In Florence, they visited museums and admired beautiful paintings. Venice was their favorite city because of the canals and gondolas. They took hundreds of photos. The weather was perfect—sunny and warm. Jenny wants to return to Italy next year.",
+      "questions": [
+        {"question_english": "Who did Jenny travel with?", "question_native": "¿Con quién viajó Jenny?", "options": ["Her mother", "Her sister", "Her friend", "Her husband"], "correct_answer": 1},
+        {"question_english": "Which city was their favorite?", "question_native": "¿Cuál fue su ciudad favorita?", "options": ["Rome", "Florence", "Venice", "Milan"], "correct_answer": 2},
+        {"question_english": "How was the weather?", "question_native": "¿Cómo estuvo el clima?", "options": ["Rainy", "Cold", "Sunny and warm", "Windy"], "correct_answer": 2}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": {
+      "passage": "Mark recently started a new job at a tech company. He works as a software developer. His office is modern and comfortable, with large windows and natural light. Mark's team is very friendly and helpful. They have meetings every Monday morning to discuss their projects. Mark enjoys the creative challenges of his work. The company also offers free lunch and a gym. He is very happy with his new position.",
+      "questions": [
+        {"question_english": "What is Mark's new job?", "question_native": "¿Cuál es el nuevo trabajo de Mark?", "options": ["Teacher", "Software developer", "Designer", "Manager"], "correct_answer": 1},
+        {"question_english": "When does his team have meetings?", "question_native": "¿Cuándo tiene reuniones su equipo?", "options": ["Monday morning", "Friday afternoon", "Wednesday noon", "Tuesday evening"], "correct_answer": 0},
+        {"question_english": "What does the company offer?", "question_native": "¿Qué ofrece la empresa?", "options": ["Free parking", "Free lunch and gym", "Company car", "Travel opportunities"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": {
+      "passage": "Sophie loves cooking and recently started her own food blog. She shares recipes and cooking tips online. Every week, she posts three new recipes. Her most popular posts are about healthy desserts and quick dinner ideas. Sophie also takes beautiful photos of her dishes. She has gained many followers who leave nice comments. Sophie dreams of publishing a cookbook someday. She spends most weekends experimenting with new recipes in her kitchen.",
+      "questions": [
+        {"question_english": "What did Sophie start?", "question_native": "¿Qué empezó Sophie?", "options": ["A restaurant", "A food blog", "A cooking school", "A catering business"], "correct_answer": 1},
+        {"question_english": "How many recipes does she post weekly?", "question_native": "¿Cuántas recetas publica semanalmente?", "options": ["Two", "Three", "Four", "Five"], "correct_answer": 1},
+        {"question_english": "What is Sophie's dream?", "question_native": "¿Cuál es el sueño de Sophie?", "options": ["Open a restaurant", "Publish a cookbook", "Become a chef", "Start a YouTube channel"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": {
+      "passage": "The community center in our neighborhood organized a talent show last weekend. Many people participated, showing different skills. There were singers, dancers, and magicians. A young girl played the violin beautifully. Two teenagers performed a funny comedy sketch. The audience laughed and clapped enthusiastically. The event raised money for a local charity. Everyone had a wonderful time. The organizers plan to make it an annual event.",
+      "questions": [
+        {"question_english": "What did the community center organize?", "question_native": "¿Qué organizó el centro comunitario?", "options": ["A concert", "A talent show", "A sports competition", "A book fair"], "correct_answer": 1},
+        {"question_english": "What did a young girl do?", "question_native": "¿Qué hizo una niña?", "options": ["Sang", "Danced", "Played violin", "Did magic"], "correct_answer": 2},
+        {"question_english": "What was the purpose of the event?", "question_native": "¿Cuál fue el propósito del evento?", "options": ["Entertainment only", "Raise money for charity", "Find new talent", "Celebrate a holiday"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": {
+      "passage": "Rachel has been learning Spanish for six months. She takes online classes twice a week with a teacher from Mexico. Rachel also practices by watching Spanish TV shows with subtitles. She finds grammar challenging but enjoys learning new vocabulary. Rachel plans to visit Spain next summer to practice speaking with native speakers. Her friends are impressed by her progress. She can now have simple conversations in Spanish.",
+      "questions": [
+        {"question_english": "How long has Rachel been learning Spanish?", "question_native": "¿Cuánto tiempo ha estado Rachel aprendiendo español?", "options": ["Three months", "Six months", "One year", "Two years"], "correct_answer": 1},
+        {"question_english": "How does Rachel practice?", "question_native": "¿Cómo practica Rachel?", "options": ["Reading books", "Watching TV shows", "Listening to podcasts", "Playing games"], "correct_answer": 1},
+        {"question_english": "Where does Rachel plan to visit?", "question_native": "¿Dónde planea visitar Rachel?", "options": ["Mexico", "Spain", "Argentina", "Colombia"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": {
+      "passage": "The local farmers market opens every Saturday morning in the town square. Vendors sell fresh fruits, vegetables, cheese, and bread. Many people prefer shopping there because the products are organic and locally grown. Musicians often perform live music, creating a pleasant atmosphere. Children enjoy the face painting booth. The market has become a popular community gathering place. Some vendors have been selling there for over twenty years.",
+      "questions": [
+        {"question_english": "When does the farmers market open?", "question_native": "¿Cuándo abre el mercado de agricultores?", "options": ["Friday evening", "Saturday morning", "Sunday afternoon", "Every day"], "correct_answer": 1},
+        {"question_english": "Why do people prefer shopping there?", "question_native": "¿Por qué la gente prefiere comprar ahí?", "options": ["It's cheaper", "Products are organic and local", "It's closer", "More variety"], "correct_answer": 1},
+        {"question_english": "What entertainment is there?", "question_native": "¿Qué entretenimiento hay?", "options": ["Movies", "Live music", "Theater", "Sports"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": {
+      "passage": "Kevin decided to adopt a dog from the animal shelter. He visited the shelter and met many dogs looking for homes. A small brown dog named Charlie caught his attention. Charlie wagged his tail and seemed very friendly. Kevin filled out the adoption papers and took Charlie home. Now they go for walks every morning and evening. Charlie has brought so much joy to Kevin's life. Kevin is glad he made the decision to adopt.",
+      "questions": [
+        {"question_english": "Where did Kevin get his dog?", "question_native": "¿Dónde consiguió Kevin su perro?", "options": ["Pet store", "Animal shelter", "From a friend", "Breeder"], "correct_answer": 1},
+        {"question_english": "What is the dog's name?", "question_native": "¿Cómo se llama el perro?", "options": ["Max", "Buddy", "Charlie", "Rocky"], "correct_answer": 2},
+        {"question_english": "When do they go for walks?", "question_native": "¿Cuándo salen a caminar?", "options": ["Only mornings", "Only evenings", "Morning and evening", "Afternoons"], "correct_answer": 2}
+      ]
+    }
+  }
+]

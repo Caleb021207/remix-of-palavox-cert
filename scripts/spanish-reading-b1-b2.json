@@ -1,0 +1,79 @@
+[
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "Regular physical activity is essential for maintaining good health and preventing chronic diseases. Exercise strengthens the cardiovascular system, improves muscle tone, and enhances flexibility. Studies show that people who exercise regularly have lower rates of heart disease, diabetes, and obesity. Physical activity also has mental health benefits, reducing stress and anxiety while improving mood and cognitive function. Experts recommend at least 150 minutes of moderate exercise per week, which can include activities like brisk walking, swimming, or cycling. Even small amounts of daily movement can make a significant difference in overall health and longevity.",
+      "questions": [
+        {"question_english": "What does exercise do for the cardiovascular system?", "question_native": "¿Qué hace el ejercicio por el sistema cardiovascular?", "options": ["Weakens it", "Strengthens it", "Has no effect", "Damages it"], "correct_answer": 1},
+        {"question_english": "How much exercise do experts recommend weekly?", "question_native": "¿Cuánto ejercicio recomiendan los expertos semanalmente?", "options": ["50 minutes", "100 minutes", "150 minutes", "200 minutes"], "correct_answer": 2},
+        {"question_english": "What mental health benefit is mentioned?", "question_native": "¿Qué beneficio para la salud mental se menciona?", "options": ["Better memory only", "Reduced stress and anxiety", "More energy", "Better sleep"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": {
+      "passage": "The internet has fundamentally transformed how we communicate, work, and access information. Email and instant messaging have replaced traditional letters for most people. Social media platforms allow us to stay connected with friends and family across the globe instantly. Online shopping has changed retail, making it possible to purchase almost anything from home. Education has also been revolutionized, with online courses and tutorials available on virtually any subject. However, the internet has also created new challenges, including privacy concerns, misinformation, and digital addiction. Finding balance in our internet use is becoming increasingly important in modern life.",
+      "questions": [
+        {"question_english": "What has replaced traditional letters?", "question_native": "¿Qué ha reemplazado las cartas tradicionales?", "options": ["Phone calls", "Email and messaging", "Telegrams", "Fax"], "correct_answer": 1},
+        {"question_english": "What challenge does the internet create?", "question_native": "¿Qué desafío crea Internet?", "options": ["Only technical problems", "Privacy and misinformation", "Too expensive", "Too complicated"], "correct_answer": 1},
+        {"question_english": "What is becoming increasingly important?", "question_native": "¿Qué está volviéndose cada vez más importante?", "options": ["Using more internet", "Finding balance in internet use", "Avoiding internet completely", "Learning programming"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": {
+      "passage": "Environmental protection has become one of the most urgent issues facing humanity. Deforestation, pollution, and climate change threaten ecosystems worldwide. Protecting the environment requires action at multiple levels. Individuals can reduce their carbon footprint by using public transportation, conserving energy, and recycling. Governments must implement stricter environmental regulations and invest in renewable energy sources. Businesses need to adopt sustainable practices and reduce waste. Education plays a crucial role in raising awareness about environmental issues. If we work together, we can preserve our planet for future generations. Every small action contributes to the larger goal of environmental conservation.",
+      "questions": [
+        {"question_english": "What threatens ecosystems worldwide?", "question_native": "¿Qué amenaza los ecosistemas mundiales?", "options": ["Only deforestation", "Deforestation, pollution, and climate change", "Natural disasters only", "Population growth only"], "correct_answer": 1},
+        {"question_english": "What should governments do?", "question_native": "¿Qué deberían hacer los gobiernos?", "options": ["Nothing", "Implement regulations and invest in renewable energy", "Only tax more", "Ignore the problem"], "correct_answer": 1},
+        {"question_english": "What role does education play?", "question_native": "¿Qué papel juega la educación?", "options": ["No role", "Raising awareness", "Only for scientists", "Making laws"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": {
+      "passage": "Living in a city offers numerous advantages, including access to better job opportunities, cultural attractions, and diverse dining options. Cities provide excellent public transportation and healthcare facilities. However, urban life also has drawbacks such as higher cost of living, noise pollution, and crowded spaces. In contrast, the countryside offers peace, clean air, and closer connection to nature. Rural areas typically have lower living costs and stronger community bonds. Yet they often lack career opportunities and modern amenities. The choice between city and countryside depends on individual priorities and lifestyle preferences. Some people find a balance by living in suburbs that combine elements of both environments.",
+      "questions": [
+        {"question_english": "What advantage does city life offer?", "question_native": "¿Qué ventaja ofrece la vida en la ciudad?", "options": ["Only entertainment", "Better job opportunities and culture", "Cheaper living", "More space"], "correct_answer": 1},
+        {"question_english": "What do rural areas typically have?", "question_native": "¿Qué tienen típicamente las áreas rurales?", "options": ["Higher costs", "Lower costs and stronger community", "Better jobs", "More pollution"], "correct_answer": 1},
+        {"question_english": "What determines the best choice?", "question_native": "¿Qué determina la mejor elección?", "options": ["Only income", "Individual priorities and lifestyle", "Age only", "Family size"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": {
+      "passage": "Reading books provides numerous benefits beyond entertainment. It expands vocabulary, improves concentration, and enhances critical thinking skills. Regular reading has been linked to better memory and cognitive function as we age. Books expose us to different perspectives and cultures, fostering empathy and understanding. Reading fiction, in particular, can improve our ability to understand others' emotions and motivations. In our digital age, where attention spans are shrinking, reading books helps maintain focus and deep thinking. Whether fiction or non-fiction, books offer a mental escape and a way to continuously learn. Libraries and e-books have made reading more accessible than ever before.",
+      "questions": [
+        {"question_english": "What does reading improve?", "question_native": "¿Qué mejora la lectura?", "options": ["Only entertainment", "Vocabulary, concentration, and critical thinking", "Just memory", "Only writing skills"], "correct_answer": 1},
+        {"question_english": "What benefit does fiction reading provide?", "question_native": "¿Qué beneficio proporciona leer ficción?", "options": ["Better math skills", "Understanding others' emotions", "Faster reading", "Better spelling"], "correct_answer": 1},
+        {"question_english": "What challenge does reading address in the digital age?", "question_native": "¿Qué desafío aborda la lectura en la era digital?", "options": ["Too expensive", "Shrinking attention spans", "Too difficult", "No availability"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": {
+      "passage": "Music plays a vital role in human culture and individual well-being. It has the power to evoke emotions, create memories, and bring people together. Research shows that listening to music can reduce stress, lower blood pressure, and improve mood. Learning to play a musical instrument enhances cognitive development and discipline. Music therapy is used to help people with various mental and physical health conditions. Different cultures have unique musical traditions that reflect their history and values. In the modern era, streaming services have made an incredible variety of music accessible to everyone. Whether we're celebrating, mourning, or simply relaxing, music enriches our lives in countless ways.",
+      "questions": [
+        {"question_english": "What can listening to music do?", "question_native": "¿Qué puede hacer escuchar música?", "options": ["Only entertain", "Reduce stress and improve mood", "Make you tired", "Nothing special"], "correct_answer": 1},
+        {"question_english": "What does learning an instrument enhance?", "question_native": "¿Qué mejora aprender un instrumento?", "options": ["Only musical skills", "Cognitive development and discipline", "Physical strength", "Social media skills"], "correct_answer": 1},
+        {"question_english": "What is music therapy used for?", "question_native": "¿Para qué se usa la musicoterapia?", "options": ["Entertainment only", "Helping with health conditions", "Making money", "Teaching music"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": {
+      "passage": "Traveling broadens our perspectives and challenges our assumptions about the world. When we visit new places, we encounter different customs, languages, and ways of life. This exposure helps us develop empathy and cultural awareness. Travel teaches us to adapt to unfamiliar situations and become more flexible problem-solvers. We learn about history and geography in ways that textbooks cannot convey. Meeting people from different backgrounds shows us both the diversity and common humanity we share. Travel experiences often lead to personal growth and increased confidence. While it can be expensive and sometimes uncomfortable, the insights and memories gained from travel are invaluable. Every journey, whether near or far, offers opportunities for learning and self-discovery.",
+      "questions": [
+        {"question_english": "What does travel help us develop?", "question_native": "¿Qué nos ayuda a desarrollar viajar?", "options": ["Only language skills", "Empathy and cultural awareness", "Just photography skills", "Only memories"], "correct_answer": 1},
+        {"question_english": "What does travel teach us?", "question_native": "¿Qué nos enseña viajar?", "options": ["To avoid change", "To adapt and solve problems", "To stay comfortable", "To spend money"], "correct_answer": 1},
+        {"question_english": "What do travel experiences lead to?", "question_native": "¿A qué conducen las experiencias de viaje?", "options": ["Only photos", "Personal growth and confidence", "Exhaustion only", "Nothing important"], "correct_answer": 1}
+      ]
+    }
+  }
+]

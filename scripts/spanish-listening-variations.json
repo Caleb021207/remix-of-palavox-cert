@@ -1,0 +1,13 @@
+[
+  {
+    "section": "listening", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "script": "Hi, I'm Anna. I'm a student. I'm twenty years old. I live with my roommate Sarah. We live in a small apartment near the university. I study biology. I like science very much. On weekends, I visit my parents. They live in the countryside. I have a cat named Mimi.",
+      "questions": [
+        {"question_english": "How old is Anna?", "question_native": "¿Cuántos años tiene Anna?", "options": ["Eighteen", "Twenty", "Twenty-two", "Twenty-five"], "correct_answer": 1},
+        {"question_english": "Who does Anna live with?", "question_native": "¿Con quién vive Anna?", "options": ["Her parents", "Her roommate Sarah", "Alone", "Her sister"], "correct_answer": 1},
+        {"question_english": "What does Anna study?", "question_native": "¿Qué estudia Anna?", "options": ["Math", "Biology", "History", "Art"], "correct_answer": 1}
+      ]
+    }
+  }
+]

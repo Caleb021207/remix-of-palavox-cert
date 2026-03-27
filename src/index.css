@@ -1,0 +1,113 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 23%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 23%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 23%;
+
+    --primary: 248 29% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 10% 23%;
+
+    --muted: 270 20% 94%;
+    --muted-foreground: 240 5% 23%;
+
+    --accent: 42 88% 66%;
+    --accent-foreground: 240 10% 12%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 248 29% 35%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 270 20% 94%;
+    --sidebar-foreground: 240 10% 23%;
+    --sidebar-primary: 248 29% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 12%;
+    --foreground: 0 0% 100%;
+
+    --card: 240 10% 15%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 240 10% 12%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 248 29% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 270 10% 25%;
+    --muted-foreground: 240 5% 85%;
+
+    --accent: 42 88% 66%;
+    --accent-foreground: 240 10% 12%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 5% 25%;
+    --input: 240 5% 25%;
+    --ring: 248 29% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-palavox-purple;
+  }
+}
+
+.btn-primary {
+  @apply bg-palavox-gold text-palavox-charcoal hover:bg-amber-400 px-6 py-3 rounded-md font-medium transition-colors duration-300;
+}
+
+.btn-secondary {
+  @apply bg-palavox-purple text-palavox-ivory hover:bg-indigo-800 px-6 py-3 rounded-md font-medium transition-colors duration-300;
+}
+
+.card {
+  @apply bg-white shadow-md rounded-lg p-6 border border-gray-100;
+}
+
+.container-custom {
+  @apply container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.fade-in {
+  @apply animate-fade-in;
+}

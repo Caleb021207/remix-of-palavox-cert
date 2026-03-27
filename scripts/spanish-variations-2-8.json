@@ -1,0 +1,170 @@
+[
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Write about your favorite food.", "prompt_native": "Escribe sobre tu comida favorita.", "instructions_english": "Write 40-60 words describing what you like to eat.", "instructions_native": "Escribe 40-60 palabras describiendo qué te gusta comer.", "expected_length": "short", "topic": "food" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Describe your family.", "prompt_native": "Describe a tu familia.", "instructions_english": "Write 40-60 words about your family members.", "instructions_native": "Escribe 40-60 palabras sobre los miembros de tu familia.", "expected_length": "short", "topic": "family" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Write about your home.", "prompt_native": "Escribe sobre tu hogar.", "instructions_english": "Write 40-60 words describing where you live.", "instructions_native": "Escribe 40-60 palabras describiendo dónde vives.", "expected_length": "short", "topic": "home" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Describe your best friend.", "prompt_native": "Describe a tu mejor amigo.", "instructions_english": "Write 40-60 words about your best friend.", "instructions_native": "Escribe 40-60 palabras sobre tu mejor amigo.", "expected_length": "short", "topic": "friendship" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Write about your hobbies.", "prompt_native": "Escribe sobre tus pasatiempos.", "instructions_english": "Write 40-60 words about what you do for fun.", "instructions_native": "Escribe 40-60 palabras sobre lo que haces para divertirte.", "expected_length": "short", "topic": "hobbies" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Describe your typical weekend.", "prompt_native": "Describe tu fin de semana típico.", "instructions_english": "Write 40-60 words about what you do on weekends.", "instructions_native": "Escribe 40-60 palabras sobre qué haces los fines de semana.", "expected_length": "short", "topic": "leisure" }
+  },
+  {
+    "section": "writing", "level": "A1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Write about your favorite season.", "prompt_native": "Escribe sobre tu estación favorita.", "instructions_english": "Write 40-60 words about which season you like best and why.", "instructions_native": "Escribe 40-60 palabras sobre qué estación te gusta más y por qué.", "expected_length": "short", "topic": "weather" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Describe a memorable birthday celebration.", "prompt_native": "Describe una celebración de cumpleaños memorable.", "instructions_english": "Write 60-80 words about a special birthday you remember.", "instructions_native": "Escribe 60-80 palabras sobre un cumpleaños especial que recuerdas.", "expected_length": "short", "topic": "celebrations" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Write about your school or work.", "prompt_native": "Escribe sobre tu escuela o trabajo.", "instructions_english": "Write 60-80 words describing what you do at school or work.", "instructions_native": "Escribe 60-80 palabras describiendo qué haces en la escuela o el trabajo.", "expected_length": "short", "topic": "work_education" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Describe your favorite restaurant.", "prompt_native": "Describe tu restaurante favorito.", "instructions_english": "Write 60-80 words about a restaurant you like and why.", "instructions_native": "Escribe 60-80 palabras sobre un restaurante que te gusta y por qué.", "expected_length": "short", "topic": "dining" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Write about a time you helped someone.", "prompt_native": "Escribe sobre una vez que ayudaste a alguien.", "instructions_english": "Write 60-80 words describing when and how you helped someone.", "instructions_native": "Escribe 60-80 palabras describiendo cuándo y cómo ayudaste a alguien.", "expected_length": "short", "topic": "helping_others" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Describe your daily commute or journey.", "prompt_native": "Describe tu viaje diario o desplazamiento.", "instructions_english": "Write 60-80 words about how you get to school or work.", "instructions_native": "Escribe 60-80 palabras sobre cómo llegas a la escuela o al trabajo.", "expected_length": "short", "topic": "transportation" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Write about your favorite movie or TV show.", "prompt_native": "Escribe sobre tu película o programa de televisión favorito.", "instructions_english": "Write 60-80 words describing what you like to watch and why.", "instructions_native": "Escribe 60-80 palabras describiendo qué te gusta ver y por qué.", "expected_length": "short", "topic": "entertainment" }
+  },
+  {
+    "section": "writing", "level": "A2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Describe a special tradition in your family or culture.", "prompt_native": "Describe una tradición especial de tu familia o cultura.", "instructions_english": "Write 60-80 words about a tradition you celebrate.", "instructions_native": "Escribe 60-80 palabras sobre una tradición que celebras.", "expected_length": "short", "topic": "culture" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Discuss the benefits of regular exercise.", "prompt_native": "Discute los beneficios del ejercicio regular.", "instructions_english": "Write 100-120 words about why physical activity is important.", "instructions_native": "Escribe 100-120 palabras sobre por qué la actividad física es importante.", "expected_length": "medium", "topic": "health" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Explain how the internet has changed daily life.", "prompt_native": "Explica cómo Internet ha cambiado la vida diaria.", "instructions_english": "Write 100-120 words discussing the impact of the internet.", "instructions_native": "Escribe 100-120 palabras discutiendo el impacto de Internet.", "expected_length": "medium", "topic": "technology" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Describe the importance of protecting the environment.", "prompt_native": "Describe la importancia de proteger el medio ambiente.", "instructions_english": "Write 100-120 words about environmental protection.", "instructions_native": "Escribe 100-120 palabras sobre la protección del medio ambiente.", "expected_length": "medium", "topic": "environment" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Discuss the advantages of living in a city versus the countryside.", "prompt_native": "Discute las ventajas de vivir en una ciudad versus el campo.", "instructions_english": "Write 100-120 words comparing urban and rural life.", "instructions_native": "Escribe 100-120 palabras comparando la vida urbana y rural.", "expected_length": "medium", "topic": "lifestyle" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Explain why reading books is valuable.", "prompt_native": "Explica por qué leer libros es valioso.", "instructions_english": "Write 100-120 words about the benefits of reading.", "instructions_native": "Escribe 100-120 palabras sobre los beneficios de la lectura.", "expected_length": "medium", "topic": "reading" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Describe the role of music in people's lives.", "prompt_native": "Describe el papel de la música en la vida de las personas.", "instructions_english": "Write 100-120 words discussing how music affects us.", "instructions_native": "Escribe 100-120 palabras discutiendo cómo nos afecta la música.", "expected_length": "medium", "topic": "music" }
+  },
+  {
+    "section": "writing", "level": "B1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Discuss how travel broadens one's perspective.", "prompt_native": "Discute cómo viajar amplía la perspectiva de uno.", "instructions_english": "Write 100-120 words about what we learn from traveling.", "instructions_native": "Escribe 100-120 palabras sobre lo que aprendemos al viajar.", "expected_length": "medium", "topic": "travel_culture" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Analyze the impact of social media on society.", "prompt_native": "Analiza el impacto de las redes sociales en la sociedad.", "instructions_english": "Write 150-180 words examining positive and negative effects.", "instructions_native": "Escribe 150-180 palabras examinando efectos positivos y negativos.", "expected_length": "medium", "topic": "social_media" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Discuss the challenges and benefits of online education.", "prompt_native": "Discute los desafíos y beneficios de la educación en línea.", "instructions_english": "Write 150-180 words presenting both sides of online learning.", "instructions_native": "Escribe 150-180 palabras presentando ambos lados del aprendizaje en línea.", "expected_length": "medium", "topic": "online_education" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Examine the role of technology in modern healthcare.", "prompt_native": "Examina el papel de la tecnología en la atención médica moderna.", "instructions_english": "Write 150-180 words discussing technological advances in medicine.", "instructions_native": "Escribe 150-180 palabras discutiendo avances tecnológicos en medicina.", "expected_length": "medium", "topic": "healthcare_tech" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Discuss the importance of work-life balance.", "prompt_native": "Discute la importancia del equilibrio entre trabajo y vida.", "instructions_english": "Write 150-180 words about balancing career and personal life.", "instructions_native": "Escribe 150-180 palabras sobre equilibrar carrera y vida personal.", "expected_length": "medium", "topic": "work_life_balance" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Analyze how globalization affects local cultures.", "prompt_native": "Analiza cómo la globalización afecta las culturas locales.", "instructions_english": "Write 150-180 words examining cultural impacts of globalization.", "instructions_native": "Escribe 150-180 palabras examinando impactos culturales de la globalización.", "expected_length": "medium", "topic": "globalization" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Discuss the pros and cons of electric vehicles.", "prompt_native": "Discute los pros y contras de los vehículos eléctricos.", "instructions_english": "Write 150-180 words examining electric vehicle adoption.", "instructions_native": "Escribe 150-180 palabras examinando la adopción de vehículos eléctricos.", "expected_length": "medium", "topic": "sustainable_transport" }
+  },
+  {
+    "section": "writing", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Examine the influence of advertising on consumer behavior.", "prompt_native": "Examina la influencia de la publicidad en el comportamiento del consumidor.", "instructions_english": "Write 150-180 words analyzing how advertising affects purchasing decisions.", "instructions_native": "Escribe 150-180 palabras analizando cómo la publicidad afecta las decisiones de compra.", "expected_length": "medium", "topic": "marketing" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Critically assess the impact of automation on employment.", "prompt_native": "Evalúa críticamente el impacto de la automatización en el empleo.", "instructions_english": "Write 200-250 words analyzing economic and social implications.", "instructions_native": "Escribe 200-250 palabras analizando implicaciones económicas y sociales.", "expected_length": "long", "topic": "automation" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Analyze the ethical implications of genetic engineering.", "prompt_native": "Analiza las implicaciones éticas de la ingeniería genética.", "instructions_english": "Write 200-250 words examining moral and scientific considerations.", "instructions_native": "Escribe 200-250 palabras examinando consideraciones morales y científicas.", "expected_length": "long", "topic": "bioethics" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Examine the role of mass media in shaping public opinion.", "prompt_native": "Examina el papel de los medios de comunicación masivos en la formación de la opinión pública.", "instructions_english": "Write 200-250 words analyzing media influence on society.", "instructions_native": "Escribe 200-250 palabras analizando la influencia de los medios en la sociedad.", "expected_length": "long", "topic": "media_influence" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Discuss the challenges of achieving sustainable urban development.", "prompt_native": "Discute los desafíos de lograr un desarrollo urbano sostenible.", "instructions_english": "Write 200-250 words examining environmental and social factors.", "instructions_native": "Escribe 200-250 palabras examinando factores ambientales y sociales.", "expected_length": "long", "topic": "urban_planning" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Analyze how economic inequality affects social cohesion.", "prompt_native": "Analiza cómo la desigualdad económica afecta la cohesión social.", "instructions_english": "Write 200-250 words examining societal impacts of wealth disparity.", "instructions_native": "Escribe 200-250 palabras examinando impactos sociales de la disparidad de riqueza.", "expected_length": "long", "topic": "inequality" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Examine the relationship between language and cultural identity.", "prompt_native": "Examina la relación entre lengua e identidad cultural.", "instructions_english": "Write 200-250 words analyzing linguistic and cultural connections.", "instructions_native": "Escribe 200-250 palabras analizando conexiones lingüísticas y culturales.", "expected_length": "long", "topic": "language_culture" }
+  },
+  {
+    "section": "writing", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Critically evaluate the effectiveness of international cooperation on global challenges.", "prompt_native": "Evalúa críticamente la efectividad de la cooperación internacional en desafíos globales.", "instructions_english": "Write 200-250 words analyzing successes and failures of global governance.", "instructions_native": "Escribe 200-250 palabras analizando éxitos y fracasos de la gobernanza global.", "expected_length": "long", "topic": "global_cooperation" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": { "prompt_english": "Examine the philosophical foundations of human rights in contemporary society.", "prompt_native": "Examina los fundamentos filosóficos de los derechos humanos en la sociedad contemporánea.", "instructions_english": "Write 250-300 words exploring theoretical and practical dimensions.", "instructions_native": "Escribe 250-300 palabras explorando dimensiones teóricas y prácticas.", "expected_length": "long", "topic": "human_rights_philosophy" }
+    },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": { "prompt_english": "Analyze the epistemological challenges posed by postmodernism.", "prompt_native": "Analiza los desafíos epistemológicos planteados por el posmodernismo.", "instructions_english": "Write 250-300 words examining knowledge and truth in postmodern thought.", "instructions_native": "Escribe 250-300 palabras examinando conocimiento y verdad en el pensamiento posmoderno.", "expected_length": "long", "topic": "postmodernism" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": { "prompt_english": "Critically assess the concept of objectivity in scientific research.", "prompt_native": "Evalúa críticamente el concepto de objetividad en la investigación científica.", "instructions_english": "Write 250-300 words examining philosophical and methodological issues.", "instructions_native": "Escribe 250-300 palabras examinando cuestiones filosóficas y metodológicas.", "expected_length": "long", "topic": "scientific_objectivity" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": { "prompt_english": "Examine the tension between individual liberty and collective security in democratic societies.", "prompt_native": "Examina la tensión entre libertad individual y seguridad colectiva en sociedades democráticas.", "instructions_english": "Write 250-300 words analyzing political and ethical dimensions.", "instructions_native": "Escribe 250-300 palabras analizando dimensiones políticas y éticas.", "expected_length": "long", "topic": "liberty_security" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": { "prompt_english": "Analyze the implications of consciousness studies for understanding free will.", "prompt_native": "Analiza las implicaciones de los estudios de consciencia para entender el libre albedrío.", "instructions_english": "Write 250-300 words examining neuroscientific and philosophical perspectives.", "instructions_native": "Escribe 250-300 palabras examinando perspectivas neurocientíficas y filosóficas.", "expected_length": "long", "topic": "consciousness_free_will" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": { "prompt_english": "Critically evaluate the concept of authenticity in late modernity.", "prompt_native": "Evalúa críticamente el concepto de autenticidad en la modernidad tardía.", "instructions_english": "Write 250-300 words examining identity and selfhood in contemporary culture.", "instructions_native": "Escribe 250-300 palabras examinando identidad y subjetividad en la cultura contemporánea.", "expected_length": "long", "topic": "authenticity_modernity" }
+  },
+  {
+    "section": "writing", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": { "prompt_english": "Examine the paradoxes inherent in democratic governance and majority rule.", "prompt_native": "Examina las paradojas inherentes en la gobernanza democrática y el gobierno de la mayoría.", "instructions_english": "Write 250-300 words analyzing theoretical tensions in democratic theory.", "instructions_native": "Escribe 250-300 palabras analizando tensiones teóricas en la teoría democrática.", "expected_length": "long", "topic": "democratic_paradoxes" }
+  }
+]

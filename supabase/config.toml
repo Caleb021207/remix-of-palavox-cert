@@ -1,0 +1,28 @@
+project_id = "jyvmhtterlpszklhgjwp"
+
+[functions.generate-comprehension-content]
+verify_jwt = false
+
+[functions.generate-listening-content]
+verify_jwt = false
+
+[functions.generate-speaking-prompts]
+verify_jwt = false
+
+[functions.get-realtime-token]
+verify_jwt = false
+
+[functions.prewarm-pool]
+verify_jwt = false
+
+[functions.start-prewarm]
+verify_jwt = false
+
+[functions.validate-writing]
+verify_jwt = false
+
+[functions.score-writing]
+verify_jwt = false
+
+[functions.generate-writing-prompts]
+verify_jwt = false

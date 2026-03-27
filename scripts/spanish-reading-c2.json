@@ -1,0 +1,13 @@
+[
+  {
+    "section": "reading", "level": "C2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "The philosophical discourse surrounding human rights in contemporary society reveals fundamental tensions between universalist and relativist perspectives. Universalists contend that certain rights are inherent to human dignity and transcend cultural boundaries, while relativists argue that rights are culturally constructed and imposing Western conceptions globally constitutes a form of neo-imperialism. This debate intensifies when addressing practices like female genital mutilation or arranged marriages, where cultural traditions conflict with proclaimed universal rights. The very concept of individual rights reflects Enlightenment-era Western philosophy and may not resonate with collectivist societies prioritizing community harmony over individual autonomy. International human rights frameworks attempt to bridge these divides through dialogue and finding common ground across civilizations. However, their enforcement mechanisms remain weak, dependent on state compliance. Power dynamics significantly influence which rights receive international attention—labor rights in developing nations often garner less concern than political freedoms, despite affecting millions. The challenge isn't merely philosophical but practical: creating a rights framework that respects cultural diversity while protecting vulnerable individuals from oppression, regardless of tradition's sanction.",
+      "questions": [
+        {"question_english": "What do universalists contend about rights?", "question_native": "¿Qué sostienen los universalistas sobre los derechos?", "options": ["Rights are cultural inventions", "Certain rights transcend cultural boundaries", "No rights exist", "Only Western rights matter"], "correct_answer": 1},
+        {"question_english": "What does individual rights concept reflect?", "question_native": "¿Qué refleja el concepto de derechos individuales?", "options": ["Universal human nature", "Enlightenment-era Western philosophy", "Ancient Asian wisdom", "Modern science"], "correct_answer": 1},
+        {"question_english": "What is the practical challenge mentioned?", "question_native": "¿Cuál es el desafío práctico mencionado?", "options": ["Finding any common ground", "Respecting diversity while protecting vulnerable individuals", "Eliminating all traditions", "Imposing one culture"], "correct_answer": 1}
+      ]
+    }
+  }
+]

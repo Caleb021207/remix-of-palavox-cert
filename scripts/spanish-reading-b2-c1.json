@@ -1,0 +1,156 @@
+[
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "Social media platforms have revolutionized communication and information sharing, but their impact on society is increasingly scrutinized. While these platforms enable unprecedented connectivity and democratize information dissemination, they also facilitate the spread of misinformation and create echo chambers where users primarily encounter views that reinforce their existing beliefs. Studies suggest that excessive social media use correlates with increased anxiety and decreased face-to-face social skills, particularly among younger users. Privacy concerns have also emerged as companies collect vast amounts of personal data. Despite these challenges, social media remains a powerful tool for social movements, business marketing, and maintaining long-distance relationships. The key lies in developing digital literacy and using these platforms mindfully.",
+      "questions": [
+        {"question_english": "What negative effect do echo chambers create?", "question_native": "¿Qué efecto negativo crean las cámaras de eco?", "options": ["More diversity", "Reinforce existing beliefs", "Better communication", "More learning"], "correct_answer": 1},
+        {"question_english": "What correlates with excessive social media use?", "question_native": "¿Qué se correlaciona con el uso excesivo de redes sociales?", "options": ["Better social skills", "Increased anxiety", "More friends", "Better sleep"], "correct_answer": 1},
+        {"question_english": "What is key to managing social media?", "question_native": "¿Qué es clave para gestionar las redes sociales?", "options": ["Using it more", "Digital literacy and mindful use", "Avoiding it completely", "Only using one platform"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": {
+      "passage": "The shift to online education has accelerated dramatically, presenting both opportunities and challenges. Digital learning offers flexibility, allowing students to study at their own pace and access courses from anywhere in the world. It can be more cost-effective and provides access to a wider range of subjects and expert instructors. However, online education requires strong self-discipline and can lead to feelings of isolation. The lack of face-to-face interaction may hinder collaborative learning and social development. Technical issues and unequal access to technology create barriers for some students. Assessment integrity and ensuring student engagement are ongoing concerns. Hybrid models that combine online and in-person instruction may offer the best of both approaches.",
+      "questions": [
+        {"question_english": "What advantage does online education offer?", "question_native": "¿Qué ventaja ofrece la educación en línea?", "options": ["Only saves money", "Flexibility and access to diverse courses", "Easier exams", "Less work"], "correct_answer": 1},
+        {"question_english": "What challenge does online learning present?", "question_native": "¿Qué desafío presenta el aprendizaje en línea?", "options": ["Too much interaction", "Requires self-discipline and may cause isolation", "Too expensive", "Too many teachers"], "correct_answer": 1},
+        {"question_english": "What might offer the best approach?", "question_native": "¿Qué podría ofrecer el mejor enfoque?", "options": ["Only online", "Hybrid models", "Only in-person", "No structure"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": {
+      "passage": "Technology has transformed modern healthcare in remarkable ways. Electronic health records improve coordination among healthcare providers and reduce medical errors. Telemedicine allows patients in remote areas to access specialist care without traveling long distances. Artificial intelligence assists in diagnosing diseases and predicting patient outcomes. Wearable devices monitor vital signs and help manage chronic conditions. Robot-assisted surgery enables more precise procedures with faster recovery times. However, these advances raise concerns about data security and patient privacy. The high cost of medical technology can exacerbate healthcare inequality. Additionally, over-reliance on technology might diminish the importance of the doctor-patient relationship. Balancing technological innovation with humanistic care remains a critical challenge.",
+      "questions": [
+        {"question_english": "How do electronic health records help?", "question_native": "¿Cómo ayudan los registros médicos electrónicos?", "options": ["Make things slower", "Improve coordination and reduce errors", "Replace doctors", "Cost more money"], "correct_answer": 1},
+        {"question_english": "What concern does healthcare technology raise?", "question_native": "¿Qué preocupación genera la tecnología médica?", "options": ["It's too effective", "Data security and privacy", "Too simple", "Not useful"], "correct_answer": 1},
+        {"question_english": "What remains a critical challenge?", "question_native": "¿Qué sigue siendo un desafío crítico?", "options": ["Making technology cheaper", "Balancing innovation with humanistic care", "Avoiding all technology", "Using only old methods"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": {
+      "passage": "Achieving work-life balance has become increasingly difficult in our always-connected world. Technology allows us to work from anywhere, blurring the boundaries between professional and personal life. While this flexibility can be beneficial, it often leads to longer working hours and difficulty disconnecting. Chronic work stress contributes to burnout, health problems, and strained relationships. Organizations are recognizing that employee well-being directly impacts productivity and retention. Some companies now offer flexible schedules, remote work options, and mental health resources. Individuals must also set boundaries, prioritize self-care, and learn to say no to excessive demands. Cultural attitudes toward work vary globally, with some societies emphasizing productivity while others value leisure time more highly.",
+      "questions": [
+        {"question_english": "What has technology done to work boundaries?", "question_native": "¿Qué ha hecho la tecnología con los límites laborales?", "options": ["Made them clearer", "Blurred them", "Eliminated work", "Improved them perfectly"], "correct_answer": 1},
+        {"question_english": "What are companies now offering?", "question_native": "¿Qué están ofreciendo ahora las empresas?", "options": ["Only higher salaries", "Flexible schedules and mental health resources", "Less work", "More meetings"], "correct_answer": 1},
+        {"question_english": "What must individuals do?", "question_native": "¿Qué deben hacer los individuos?", "options": ["Work more hours", "Set boundaries and prioritize self-care", "Never say no", "Avoid all work"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": {
+      "passage": "Globalization has profoundly influenced local cultures worldwide. International trade, travel, and digital communication have created unprecedented cultural exchange. This has enriched societies by introducing new foods, music, and ideas. However, critics argue that globalization threatens cultural diversity as dominant cultures overshadow smaller ones. Local languages and traditions face extinction as younger generations adopt global mainstream culture. The spread of multinational corporations can homogenize local businesses and customs. Yet globalization also enables cultural preservation through digital archiving and global awareness campaigns. Many communities are finding ways to adapt while maintaining their cultural identity. The challenge lies in embracing global connectivity while protecting and celebrating local heritage.",
+      "questions": [
+        {"question_english": "What has globalization created?", "question_native": "¿Qué ha creado la globalización?", "options": ["Only problems", "Unprecedented cultural exchange", "Complete isolation", "No change"], "correct_answer": 1},
+        {"question_english": "What threat does globalization pose?", "question_native": "¿Qué amenaza representa la globalización?", "options": ["Too much diversity", "Threatens cultural diversity and local traditions", "Too much isolation", "No threat"], "correct_answer": 1},
+        {"question_english": "What is the challenge mentioned?", "question_native": "¿Cuál es el desafío mencionado?", "options": ["Avoiding all global contact", "Embracing connectivity while protecting heritage", "Only preserving the past", "Complete cultural change"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": {
+      "passage": "Electric vehicles (EVs) are increasingly promoted as a sustainable transportation solution. They produce zero direct emissions, reducing air pollution in urban areas. As renewable energy sources expand, EVs can significantly decrease carbon footprints. Battery technology improvements have extended driving ranges and reduced costs. Government incentives in many countries support EV adoption. However, challenges remain. Manufacturing batteries requires significant energy and rare earth minerals, raising environmental and ethical concerns. Charging infrastructure is still limited in many regions. The electricity grid must be upgraded to handle widespread EV adoption. Additionally, battery disposal and recycling present environmental challenges. While EVs represent progress, they are not a complete solution to transportation sustainability.",
+      "questions": [
+        {"question_english": "What advantage do EVs offer?", "question_native": "¿Qué ventaja ofrecen los vehículos eléctricos?", "options": ["Only style", "Zero direct emissions", "Unlimited range", "No cost"], "correct_answer": 1},
+        {"question_english": "What challenge remains with EVs?", "question_native": "¿Qué desafío persiste con los vehículos eléctricos?", "options": ["Too quiet", "Battery manufacturing and infrastructure limitations", "Too fast", "Too popular"], "correct_answer": 1},
+        {"question_english": "What is the passage's conclusion about EVs?", "question_native": "¿Cuál es la conclusión del pasaje sobre los vehículos eléctricos?", "options": ["Perfect solution", "Progress but not complete solution", "Should be avoided", "No impact"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "B2", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": {
+      "passage": "Advertising profoundly influences consumer behavior and shapes cultural values. Modern advertising uses sophisticated psychological techniques to create desires and influence purchasing decisions. It targets specific demographics using detailed consumer data collected through digital platforms. While advertising informs consumers about products and drives economic growth, it also raises ethical concerns. It can promote unrealistic beauty standards, materialism, and unhealthy products. Children are particularly vulnerable to advertising messages. Some countries have implemented stricter regulations on advertising, especially for products like tobacco and alcohol. Digital advertising's ability to track and target individuals raises privacy concerns. As consumers become more aware of advertising tactics, some are developing skepticism and seeking ad-free experiences.",
+      "questions": [
+        {"question_english": "What does modern advertising use?", "question_native": "¿Qué usa la publicidad moderna?", "options": ["Only creativity", "Sophisticated psychological techniques", "Simple messages", "No strategy"], "correct_answer": 1},
+        {"question_english": "What ethical concern does advertising raise?", "question_native": "¿Qué preocupación ética genera la publicidad?", "options": ["Too honest", "Promotes unrealistic standards and materialism", "Not effective", "Too cheap"], "correct_answer": 1},
+        {"question_english": "How are consumers responding?", "question_native": "¿Cómo están respondiendo los consumidores?", "options": ["Believing everything", "Developing skepticism", "Watching more ads", "Ignoring all information"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 2,
+    "payload": {
+      "passage": "The rise of automation and artificial intelligence presents complex implications for the future of employment. While technological advancement has historically created more jobs than it eliminated, the current wave of automation differs in scope and speed. Routine cognitive and manual tasks are increasingly performed by machines, affecting not just manufacturing but also service sectors, finance, and even creative professions. Proponents argue that automation will free humans from repetitive work, allowing focus on creative and interpersonal tasks while boosting productivity and economic growth. However, the transition period may create significant social disruption, with job displacement outpacing retraining efforts. Income inequality could widen as returns on capital increase while wages for routine work decline. Addressing these challenges requires comprehensive policy responses, including education reform, social safety nets, and potentially universal basic income. The question isn't whether to embrace automation, but how to manage its implementation to benefit society broadly rather than concentrating advantages among capital owners.",
+      "questions": [
+        {"question_english": "How does current automation differ from historical technological advancement?", "question_native": "¿En qué difiere la automatización actual del avance tecnológico histórico?", "options": ["It's slower", "It differs in scope and speed", "It creates more jobs", "It's identical"], "correct_answer": 1},
+        {"question_english": "What do proponents argue automation will do?", "question_native": "¿Qué argumentan los defensores que hará la automatización?", "options": ["Eliminate all jobs", "Free humans from repetitive work", "Reduce productivity", "Stop progress"], "correct_answer": 1},
+        {"question_english": "What is the key question about automation?", "question_native": "¿Cuál es la pregunta clave sobre la automatización?", "options": ["Whether to embrace it", "How to manage its implementation for broad benefit", "How to stop it", "Whether it exists"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 3,
+    "payload": {
+      "passage": "Genetic engineering technologies like CRISPR have opened unprecedented possibilities for treating diseases and enhancing human capabilities, while simultaneously raising profound ethical questions. The ability to edit genes offers hope for curing hereditary diseases, but the prospect of designer babies and genetic enhancement for non-medical purposes troubles ethicists. Concerns about eugenics and creating genetic inequality are legitimate given historical abuses. There's also the question of consent—future generations cannot agree to genetic modifications made before their birth. Environmental risks exist if genetically modified organisms escape controlled settings. Furthermore, the technology's accessibility varies globally, potentially exacerbating health inequalities between wealthy and poor nations. The scientific community has called for international guidelines, but enforcement remains challenging. While we possess the technical capability for genetic modification, our ethical frameworks haven't fully caught up with the implications of wielding such power over human evolution.",
+      "questions": [
+        {"question_english": "What hope does genetic engineering offer?", "question_native": "¿Qué esperanza ofrece la ingeniería genética?", "options": ["Only profit", "Curing hereditary diseases", "Creating perfect people", "No benefits"], "correct_answer": 1},
+        {"question_english": "What ethical concern involves future generations?", "question_native": "¿Qué preocupación ética involucra a generaciones futuras?", "options": ["They'll be healthier", "Cannot consent to modifications made before birth", "Will have too many choices", "No concern"], "correct_answer": 1},
+        {"question_english": "What hasn't caught up with genetic technology?", "question_native": "¿Qué no se ha puesto al día con la tecnología genética?", "options": ["Science", "Ethical frameworks", "Funding", "Interest"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 4,
+    "payload": {
+      "passage": "Mass media's role in shaping public opinion has intensified in the digital age, where information flows constantly and attention is fragmented. Traditional gatekeepers like newspapers and television networks have been supplemented, and sometimes superseded, by social media platforms and independent content creators. This democratization of information dissemination has empowered diverse voices but also enabled the spread of misinformation and propaganda. Media framing—how issues are presented rather than just what information is provided—significantly influences public perception and political outcomes. Ownership concentration means a few corporations control much of what people see and hear, raising concerns about bias and manipulation. The attention economy incentivizes sensationalism over nuance, as media outlets compete for clicks and views. Media literacy has become essential for navigating this landscape, yet many lack the critical thinking skills to evaluate sources and recognize manipulation. The challenge is maintaining an informed citizenry when information abundance paradoxically makes truth harder to discern.",
+      "questions": [
+        {"question_english": "What has supplemented traditional media gatekeepers?", "question_native": "¿Qué ha complementado a los guardianes de medios tradicionales?", "options": ["Nothing", "Social media and independent creators", "Government agencies", "Universities"], "correct_answer": 1},
+        {"question_english": "What does media framing affect?", "question_native": "¿Qué afecta el encuadre mediático?", "options": ["Only ratings", "Public perception and political outcomes", "Nothing important", "Only profits"], "correct_answer": 1},
+        {"question_english": "What has become essential in the current media landscape?", "question_native": "¿Qué se ha vuelto esencial en el panorama mediático actual?", "options": ["Watching more news", "Media literacy", "Avoiding all media", "Following one source"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 5,
+    "payload": {
+      "passage": "Sustainable urban development represents one of the most complex challenges of the 21st century, requiring coordination across environmental, economic, and social dimensions. As global urbanization accelerates, cities must accommodate growing populations while reducing environmental impact. This involves rethinking transportation systems, energy infrastructure, waste management, and housing. Green building practices and renewable energy can reduce carbon footprints, but retrofitting existing structures presents financial and logistical obstacles. Public transportation must compete with car-centric cultures in many cities. Gentrification often accompanies urban renewal, displacing long-term residents and disrupting communities. Achieving sustainability requires not just technological solutions but also addressing social equity, ensuring that environmental improvements benefit all residents rather than privileging wealthy neighborhoods. Participatory planning processes can help balance diverse stakeholder interests, though they slow decision-making. The ideal sustainable city remains elusive, but incremental progress through integrated planning offers hope.",
+      "questions": [
+        {"question_english": "What dimensions must sustainable urban development coordinate?", "question_native": "¿Qué dimensiones debe coordinar el desarrollo urbano sostenible?", "options": ["Only environmental", "Environmental, economic, and social", "Only economic", "Only technological"], "correct_answer": 1},
+        {"question_english": "What often accompanies urban renewal?", "question_native": "¿Qué suele acompañar la renovación urbana?", "options": ["Only improvements", "Gentrification and displacement", "Population decrease", "No change"], "correct_answer": 1},
+        {"question_english": "What can help balance stakeholder interests?", "question_native": "¿Qué puede ayudar a equilibrar los intereses de las partes interesadas?", "options": ["Ignoring concerns", "Participatory planning processes", "Top-down decisions", "Avoiding planning"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 6,
+    "payload": {
+      "passage": "Economic inequality has reached levels not seen since the early 20th century in many developed nations, with profound implications for social cohesion and democratic governance. The concentration of wealth among a small elite erodes the middle class and limits economic mobility. This inequality manifests not just in income but also in access to quality education, healthcare, and political influence. Research suggests that high inequality correlates with numerous social problems, including crime, health issues, and decreased trust. The causes are multifaceted: globalization, technological change favoring skilled workers, weakened labor unions, and tax policies that benefit capital over labor. Some economists argue inequality drives innovation and growth, rewarding talent and effort. However, extreme inequality can stifle opportunity and create feedback loops where inherited wealth matters more than merit. Addressing inequality requires comprehensive approaches including progressive taxation, investment in education, stronger labor protections, and campaign finance reform. The challenge is implementing such measures in political systems where economic elites wield disproportionate influence.",
+      "questions": [
+        {"question_english": "How does inequality affect democracy?", "question_native": "¿Cómo afecta la desigualdad a la democracia?", "options": ["Strengthens it", "Erodes middle class and limits influence", "No effect", "Improves it"], "correct_answer": 1},
+        {"question_english": "What do some economists argue about inequality?", "question_native": "¿Qué argumentan algunos economistas sobre la desigualdad?", "options": ["Should be eliminated completely", "Drives innovation and rewards talent", "Has no benefits", "Is impossible to measure"], "correct_answer": 1},
+        {"question_english": "What makes addressing inequality challenging?", "question_native": "¿Qué hace que abordar la desigualdad sea un desafío?", "options": ["Lack of ideas", "Economic elites wield disproportionate influence", "Everyone agrees on solutions", "It's not a real problem"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 7,
+    "payload": {
+      "passage": "The relationship between language and cultural identity is profound and multifaceted. Language serves not merely as a communication tool but as a repository of cultural knowledge, worldviews, and collective memory. Each language embodies unique ways of categorizing reality and expressing relationships. When languages die—at an estimated rate of one every two weeks—irreplaceable cultural knowledge vanishes. Linguistic diversity reflects human adaptability and creativity across different environments. However, globalization and migration create complex dynamics. Immigrant communities often face pressure to assimilate linguistically, leading to loss of mother tongues across generations. Yet multilingualism can strengthen cognitive abilities and foster cross-cultural understanding. Language revival efforts, from Welsh in Wales to Māori in New Zealand, demonstrate that language loss isn't inevitable. These initiatives require sustained institutional support and community commitment. The digital age presents both threats, as dominant languages dominate online spaces, and opportunities, as technology enables documentation and learning resources for minority languages. Preserving linguistic diversity isn't just about words—it's about maintaining humanity's diverse ways of understanding and experiencing the world.",
+      "questions": [
+        {"question_english": "What happens when languages die?", "question_native": "¿Qué sucede cuando mueren los idiomas?", "options": ["Nothing important", "Irreplaceable cultural knowledge vanishes", "New languages appear", "Communication improves"], "correct_answer": 1},
+        {"question_english": "What can multilingualism foster?", "question_native": "¿Qué puede fomentar el multilingüismo?", "options": ["Confusion", "Cognitive abilities and cross-cultural understanding", "Isolation", "Slower thinking"], "correct_answer": 1},
+        {"question_english": "What does preserving linguistic diversity maintain?", "question_native": "¿Qué mantiene preservar la diversidad lingüística?", "options": ["Only grammar rules", "Diverse ways of understanding the world", "Economic growth", "Political power"], "correct_answer": 1}
+      ]
+    }
+  },
+  {
+    "section": "reading", "level": "C1", "language": "spanish", "version": "v1-gpt4o-mini", "variation": 8,
+    "payload": {
+      "passage": "International cooperation on global challenges like climate change, pandemics, and nuclear proliferation faces significant obstacles despite widespread recognition of shared threats. The international system remains structured around sovereign nation-states pursuing national interests, making collective action difficult. Free-rider problems emerge when countries benefit from others' efforts without contributing proportionally. Powerful nations often prioritize short-term domestic concerns over long-term global benefits. Historical injustices and current power imbalances create distrust between developed and developing nations, complicating negotiations on burden-sharing. Yet examples of successful cooperation exist: the Montreal Protocol reversed ozone depletion, and international health organizations coordinate disease surveillance. The COVID-19 pandemic revealed both the necessity and difficulty of global coordination. Some scholars advocate for strengthening international institutions and creating enforcement mechanisms, while others emphasize building trust through smaller coalitions and bottom-up initiatives. The tension between national sovereignty and global governance persists, but the urgency of transnational threats may compel greater cooperation. Whether humanity can transcend narrow nationalism to address existential risks remains an open question.",
+      "questions": [
+        {"question_english": "What makes collective action difficult internationally?", "question_native": "¿Qué dificulta la acción colectiva internacionalmente?", "options": ["Too much cooperation", "System structured around sovereign national interests", "Too many solutions", "Universal agreement"], "correct_answer": 1},
+        {"question_english": "What successful example of cooperation is mentioned?", "question_native": "¿Qué ejemplo exitoso de cooperación se menciona?", "options": ["None exist", "Montreal Protocol reversed ozone depletion", "All attempts failed", "Only economic agreements"], "correct_answer": 1},
+        {"question_english": "What remains an open question?", "question_native": "¿Qué sigue siendo una pregunta abierta?", "options": ["If problems exist", "Whether humanity can transcend nationalism for existential risks", "If cooperation is needed", "If nations exist"], "correct_answer": 1}
+      ]
+    }
+  }
+]
