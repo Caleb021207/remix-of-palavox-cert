@@ -110,23 +110,29 @@ const Results = () => {
     const fetchRubricScores = async () => {
       if (!session?.id) return;
       
-      const { data, error } = await supabase
-        .from('rubric_scores')
-        .select('*')
-        .eq('test_session_id', session.id);
-      
-      if (error) {
-        console.error('Error fetching rubric scores:', error);
-        return;
-      }
-      
-      if (data && data.length > 0) {
-        const scores = {
-          writing: data.find(s => s.phase === 'writing'),
-          conversation: data.find(s => s.phase === 'conversation')
-        };
-        setRubricScores(scores);
-        console.log('📊 Rubric scores loaded:', scores);
+      try {
+        // Query scores_section for writing/speaking rubric data
+        const { data: sectionScores, error } = await supabase
+          .from('scores_section')
+          .select('*, test_sections!inner(section_type, session_id)')
+          .eq('test_sections.session_id', session.id);
+        
+        if (error) {
+          console.error('Error fetching rubric scores:', error);
+          return;
+        }
+        
+        if (sectionScores && sectionScores.length > 0) {
+          const scores: any = {};
+          sectionScores.forEach((s: any) => {
+            const sectionType = s.test_sections?.section_type;
+            if (sectionType) scores[sectionType] = s;
+          });
+          setRubricScores(scores);
+          console.log('📊 Rubric scores loaded:', scores);
+        }
+      } catch (err) {
+        console.error('Error fetching rubric scores:', err);
       }
     };
     
