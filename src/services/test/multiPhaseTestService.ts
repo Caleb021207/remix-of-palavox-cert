@@ -254,7 +254,7 @@ export async function updateTestSession(sessionId: string, updates: Partial<Test
     const updateData: any = {};
     
     if (updates.endTime) updateData.completed_at = updates.endTime.toISOString();
-    if (updates.status) updateData.status = updates.status;
+    if ((updates as any).status) updateData.status = (updates as any).status;
     
     // Store extended data in metadata
     const metadata: any = {};
