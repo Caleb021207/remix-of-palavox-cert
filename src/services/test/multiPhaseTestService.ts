@@ -281,5 +281,3 @@ export async function updateTestSession(sessionId: string, updates: Partial<Test
     throw error;
   }
 }
-  }
-}
