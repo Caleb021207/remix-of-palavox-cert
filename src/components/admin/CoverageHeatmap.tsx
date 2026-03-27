@@ -7,17 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 interface CoverageData {
   section: string;
   level: string;
-  language: string;
   count: number;
 }
 
 const SECTIONS = ['reading', 'listening', 'speaking', 'writing'];
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-const LANGUAGES = [
-  'english', 'spanish', 'french', 'german', 'italian', 'portuguese',
-  'russian', 'ukrainian', 'chinese', 'japanese', 'korean', 'hindi',
-  'vietnamese', 'indonesian', 'arabic', 'persian', 'urdu', 'pashto', 'swahili'
-];
 
 function getCellColor(count: number): string {
   if (count === 0) return 'bg-destructive/20 text-destructive';
@@ -34,33 +28,24 @@ export function CoverageHeatmap() {
   const loadCoverage = async () => {
     setLoading(true);
     try {
-      const { data: coverageData, error } = await supabase
-        .from('cert_content_pool')
-        .select('section, level, language')
-        .eq('version', 'v1-gpt4o-mini');
+      const { data: items, error } = await supabase
+        .from('item_bank')
+        .select('section_type, cefr_target')
+        .eq('active', true);
 
       if (error) throw error;
 
-      // Aggregate counts
       const counts: Record<string, number> = {};
-      coverageData?.forEach(item => {
-        const key = `${item.section}-${item.level}-${item.language}`;
+      items?.forEach(item => {
+        const key = `${item.section_type}-${item.cefr_target}`;
         counts[key] = (counts[key] || 0) + 1;
       });
 
-      // Convert to array
       const result: CoverageData[] = [];
       SECTIONS.forEach(section => {
         LEVELS.forEach(level => {
-          LANGUAGES.forEach(language => {
-            const key = `${section}-${level}-${language}`;
-            result.push({
-              section,
-              level,
-              language,
-              count: counts[key] || 0
-            });
-          });
+          const key = `${section}-${level}`;
+          result.push({ section, level, count: counts[key] || 0 });
         });
       });
 
@@ -78,15 +63,13 @@ export function CoverageHeatmap() {
     return () => clearInterval(interval);
   }, []);
 
-  const getSectionData = (section: string) => {
-    return data.filter(d => d.section === section);
-  };
+  const getSectionData = (section: string) => data.filter(d => d.section === section);
 
   const getSectionStats = (section: string) => {
     const sectionData = getSectionData(section);
     const total = sectionData.reduce((sum, d) => sum + d.count, 0);
     const covered = sectionData.filter(d => d.count > 0).length;
-    const totalCombos = LEVELS.length * LANGUAGES.length;
+    const totalCombos = LEVELS.length;
     return { total, covered, totalCombos, percent: Math.round((covered / totalCombos) * 100) };
   };
 
@@ -105,10 +88,10 @@ export function CoverageHeatmap() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Grid3X3 className="w-5 h-5" />
-          Coverage Heatmap
+          Item Bank Coverage
         </CardTitle>
         <CardDescription>
-          Content availability by section, level, and language. Colors: 
+          Items by section and CEFR level.
           <span className="inline-block w-3 h-3 bg-destructive/20 rounded mx-1" /> 0
           <span className="inline-block w-3 h-3 bg-yellow-500/30 rounded mx-1" /> 1
           <span className="inline-block w-3 h-3 bg-green-500/30 rounded mx-1" /> 2-3
@@ -124,7 +107,7 @@ export function CoverageHeatmap() {
                 <TabsTrigger key={section} value={section} className="flex flex-col py-2">
                   <span className="capitalize">{section}</span>
                   <span className="text-xs text-muted-foreground">
-                    {stats.percent}% ({stats.covered}/{stats.totalCombos})
+                    {stats.total} items
                   </span>
                 </TabsTrigger>
               );
@@ -133,39 +116,17 @@ export function CoverageHeatmap() {
 
           {SECTIONS.map(section => (
             <TabsContent key={section} value={section} className="mt-4">
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr>
-                      <th className="text-left p-1 font-medium">Language</th>
-                      {LEVELS.map(level => (
-                        <th key={level} className="text-center p-1 font-medium w-10">
-                          {level}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {LANGUAGES.map(language => (
-                      <tr key={language} className="border-t border-border/50">
-                        <td className="p-1 capitalize font-medium">{language}</td>
-                        {LEVELS.map(level => {
-                          const item = data.find(
-                            d => d.section === section && d.level === level && d.language === language
-                          );
-                          const count = item?.count || 0;
-                          return (
-                            <td key={level} className="p-1 text-center">
-                              <span className={`inline-block w-8 h-6 rounded text-xs leading-6 ${getCellColor(count)}`}>
-                                {count}
-                              </span>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-6 gap-2">
+                {LEVELS.map(level => {
+                  const item = data.find(d => d.section === section && d.level === level);
+                  const count = item?.count || 0;
+                  return (
+                    <div key={level} className={`p-3 rounded text-center ${getCellColor(count)}`}>
+                      <div className="font-medium">{level}</div>
+                      <div className="text-lg font-bold">{count}</div>
+                    </div>
+                  );
+                })}
               </div>
             </TabsContent>
           ))}

@@ -313,16 +313,19 @@ export const useAdaptiveComprehension = ({
     try {
       const correctAnswer = currentQuestion.options.find((o: any) => o.isCorrect)?.text;
       
-      await supabase.from('adaptive_question_logs').insert({
-        test_session_id: sessionId,
-        question_id: attempt.questionId,
-        section: currentPhase,
-        level: attempt.level,
-        user_answer: currentQuestion.options.find((o: any) => o.id === userAnswer)?.text,
-        correct_answer: correctAnswer,
-        is_correct: attempt.isCorrect,
-        response_time_ms: attempt.responseTimeMs,
-        confidence_at_question: attempt.confidence
+      await supabase.from('event_logs').insert({
+        session_id: sessionId,
+        event_type: 'adaptive_question_attempt',
+        payload: {
+          question_id: attempt.questionId,
+          section: currentPhase,
+          level: attempt.level,
+          user_answer: currentQuestion.options.find((o: any) => o.id === userAnswer)?.text,
+          correct_answer: correctAnswer,
+          is_correct: attempt.isCorrect,
+          response_time_ms: attempt.responseTimeMs,
+          confidence_at_question: attempt.confidence
+        }
       });
     } catch (error) {
       console.warn('Failed to log question attempt:', error);
@@ -415,10 +418,12 @@ export const useAdaptiveComprehension = ({
       const combinedScore = (readingScore + listeningScore) / 2;
       
       await supabase.from('test_sessions').update({
-        is_adaptive: true,
-        adaptive_reading_level: readingFinalLevel,
-        adaptive_listening_level: listeningFinalLevel,
-        adaptive_question_count: reading.totalCount + listening.totalCount
+        metadata: {
+          is_adaptive: true,
+          adaptive_reading_level: readingFinalLevel,
+          adaptive_listening_level: listeningFinalLevel,
+          adaptive_question_count: reading.totalCount + listening.totalCount
+        }
       }).eq('id', sessionId);
       
       onComplete(combinedScore);

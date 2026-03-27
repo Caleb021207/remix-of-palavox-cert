@@ -35,7 +35,7 @@ const ConversationalFluencyPhase: React.FC<ConversationalFluencyPhaseProps> = ({
   
   const connectionRef = useRef<RealtimeConnection | null>(null);
   const startTimeRef = useRef<Date | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const TARGET_DURATION = 180; // 3 minutes minimum
 
