@@ -11,11 +11,14 @@ import { EnglishTestVariant } from '@/config/languages/englishVariants';
 import { useUILanguage } from '@/contexts/UILanguageContext';
 import AudioPlayer from './listening/AudioPlayer';
 import AdaptiveComprehensionPhase from './AdaptiveComprehensionPhase';
+import BankComprehensionPhase from './BankComprehensionPhase';
 
 interface ComprehensionPhaseProps {
   sessionId: string;
   languageCode?: LanguageCode;
   englishVariant?: EnglishTestVariant;
+  /** 'both' runs reading then listening as one comprehension phase. */
+  skill?: 'reading' | 'listening' | 'both';
   onComplete: (score: number) => void;
 }
 
@@ -23,14 +26,50 @@ const ComprehensionPhase: React.FC<ComprehensionPhaseProps> = ({
   sessionId,
   languageCode,
   englishVariant,
+  skill = 'both',
   onComplete
 }) => {
   const { t } = useUILanguage();
-  
-  // Feature flag: use adaptive mode (can be toggled later)
-  const useAdaptiveMode = true;
-  
-  if (useAdaptiveMode) {
+
+  // Questions now come from the persistent, calibrated item bank instead of
+  // being generated live. Answer keys stay on the server.
+  const useItemBank = true;
+  const [stage, setStage] = React.useState<'reading' | 'listening'>(
+    skill === 'listening' ? 'listening' : 'reading'
+  );
+  const [readingScore, setReadingScore] = React.useState<number | null>(null);
+
+  if (useItemBank) {
+    if (skill === 'both') {
+      return (
+        <BankComprehensionPhase
+          key={stage}
+          sessionId={sessionId}
+          skill={stage}
+          onComplete={(score) => {
+            if (stage === 'reading') {
+              setReadingScore(score);
+              setStage('listening');
+            } else {
+              const combined = readingScore === null ? score : (readingScore + score) / 2;
+              onComplete(combined);
+            }
+          }}
+        />
+      );
+    }
+
+    return (
+      <BankComprehensionPhase
+        sessionId={sessionId}
+        skill={skill}
+        onComplete={onComplete}
+      />
+    );
+  }
+
+  // Legacy adaptive/generated path (kept for reference, disabled).
+  if (!useItemBank) {
     return (
       <AdaptiveComprehensionPhase
         sessionId={sessionId}
@@ -40,6 +79,7 @@ const ComprehensionPhase: React.FC<ComprehensionPhaseProps> = ({
       />
     );
   }
+
 
   const {
     currentPhase,
