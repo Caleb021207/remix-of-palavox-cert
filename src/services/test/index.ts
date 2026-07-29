@@ -14,10 +14,7 @@ export {
   generateReadingContent,
   generateListeningContent,
   generateWritingPrompts,
-  generatePronunciationPhrases,
-  evaluatePhaseResponses,
-  savePhaseResult,
-  updateTestSession
+  generatePronunciationPhrases
 } from './multiPhaseTestService';
 
 // Re-export speaking prompt service

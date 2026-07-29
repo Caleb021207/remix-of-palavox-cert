@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { BookOpen, Ear, Mic, FileText, MessageCircle, Award } from 'lucide-react';
-import { STAMP_LEVELS } from '@/utils/stampScoring';
+import { PROFICIENCY_LEVELS } from '@/utils/proficiencyScoring';
 
 interface GradingRubricProps {
   phase: string;
@@ -43,23 +43,23 @@ const GradingRubric: React.FC<GradingRubricProps> = ({ phase }) => {
     }
   };
 
-  const renderSTAMPLevels = () => {
+  const renderProficiencyLevels = () => {
     return (
       <div className="space-y-6">
         <div className="bg-gradient-to-r from-palavox-purple/10 to-palavox-lavender/30 p-6 rounded-lg border-2 border-palavox-purple/20">
           <div className="flex items-center gap-3 mb-4">
             <Award className="h-8 w-8 text-palavox-purple" />
-            <h3 className="text-2xl font-bold text-palavox-purple">ACTFL Proficiency Scale (STAMP)</h3>
+            <h3 className="text-2xl font-bold text-palavox-purple">ACTFL Proficiency Scale (Proficiency Level)</h3>
           </div>
           <p className="text-palavox-slate mb-2">
-            The Standards-based Measurement of Proficiency (STAMP) measures language proficiency aligned with the ACTFL (American Council on the Teaching of Foreign Languages) proficiency guidelines.
+            The Standards-based Measurement of Proficiency (Proficiency Level) measures language proficiency aligned with the ACTFL (American Council on the Teaching of Foreign Languages) proficiency guidelines.
           </p>
           <p className="text-sm text-palavox-slate/80">
             Your performance is evaluated across 8 distinct levels, from Novice-Low to Advanced-Mid, with each level defining specific competencies in language control, vocabulary, and accuracy. CEFR equivalents are provided for international comparison.
           </p>
         </div>
 
-        {STAMP_LEVELS.map((level, idx) => (
+        {PROFICIENCY_LEVELS.map((level, idx) => (
           <div key={level.level} className="relative">
             {idx > 0 && <Separator className="mb-6" />}
             <div className="bg-white border-2 border-palavox-lavender rounded-lg p-6 hover:shadow-lg transition-shadow">
@@ -128,7 +128,7 @@ const GradingRubric: React.FC<GradingRubricProps> = ({ phase }) => {
         </div>
       </CardHeader>
       <CardContent className="p-6">
-        {renderSTAMPLevels()}
+        {renderProficiencyLevels()}
 
         <div className="mt-8 p-6 bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-300 rounded-lg">
           <div className="flex items-start gap-3">
@@ -138,7 +138,7 @@ const GradingRubric: React.FC<GradingRubricProps> = ({ phase }) => {
             <div>
               <p className="font-semibold text-yellow-900 mb-2">How Your Score is Determined</p>
               <p className="text-sm text-yellow-800">
-                Your performance across all test sections is evaluated using the STAMP framework aligned with ACTFL proficiency guidelines. Each response is analyzed for language control, vocabulary richness, and accuracy. Your final score places you within one of the 8 proficiency levels based on ACTFL standards, with CEFR equivalents provided for international comparison and recognition.
+                Your performance across all test sections is evaluated using the Proficiency Level framework aligned with ACTFL proficiency guidelines. Each response is analyzed for language control, vocabulary richness, and accuracy. Your final score places you within one of the 8 proficiency levels based on ACTFL standards, with CEFR equivalents provided for international comparison and recognition.
               </p>
             </div>
           </div>

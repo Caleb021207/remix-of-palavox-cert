@@ -1,6 +1,6 @@
 import { CEFRLevel, TestSession, ACTFLLevel, TestType } from '../types';
 import { EnhancedScoring, ScoringDebugger } from './enhancedScoring';
-import { determineSTAMPLevel, generateSTAMPFeedback, STAMP_LEVELS } from './stampScoring';
+import { determineProficiencyLevel, generateProficiencyFeedback, PROFICIENCY_LEVELS } from './proficiencyScoring';
 
 // Calculate adaptive score based on final level and performance
 export function calculateAdaptiveScore(
@@ -37,7 +37,7 @@ export function calculateAdaptiveScore(
 export const calculateScore = (session: TestSession): number => {
   if (!session.questions) return 0;
   
-  console.log('🎯 Starting STAMP-based score calculation for session:', session.id);
+  console.log('🎯 Starting Proficiency Level-based score calculation for session:', session.id);
   ScoringDebugger.clearLogs();
   
   const result = EnhancedScoring.calculateSessionScore(session);
@@ -56,22 +56,22 @@ export const calculateScore = (session: TestSession): number => {
 };
 
 export const determineCEFRLevel = (score: number): CEFRLevel => {
-  console.log('🎯 CEFR Level Determination via STAMP:', { score });
+  console.log('🎯 CEFR Level Determination via Proficiency Level:', { score });
   
-  const stampLevel = determineSTAMPLevel(score);
-  const cefrLevel = stampLevel.cefrLevel;
+  const proficiencyLevel = determineProficiencyLevel(score);
+  const cefrLevel = proficiencyLevel.cefrLevel;
   
-  console.log('✅ Determined CEFR Level via STAMP:', { score, stampLevel: stampLevel.level, cefrLevel });
+  console.log('✅ Determined CEFR Level via Proficiency Level:', { score, proficiencyLevel: proficiencyLevel.level, cefrLevel });
   return cefrLevel;
 };
 
 export const determineACTFLLevel = (score: number): ACTFLLevel => {
-  console.log('🎯 ACTFL Level Determination via STAMP:', { score });
+  console.log('🎯 ACTFL Level Determination via Proficiency Level:', { score });
   
-  const stampLevel = determineSTAMPLevel(score);
-  const actflLevel = stampLevel.actflLevel;
+  const proficiencyLevel = determineProficiencyLevel(score);
+  const actflLevel = proficiencyLevel.actflLevel;
   
-  console.log('✅ Determined ACTFL Level via STAMP:', { score, stampLevel: stampLevel.level, actflLevel });
+  console.log('✅ Determined ACTFL Level via Proficiency Level:', { score, proficiencyLevel: proficiencyLevel.level, actflLevel });
   return actflLevel;
 };
 
@@ -80,16 +80,16 @@ export const generateFeedback = (
   cefr: CEFRLevel,
   testType: string
 ): string => {
-  const stampLevel = determineSTAMPLevel(score);
-  return `You demonstrated ${stampLevel.name} (STAMP Level ${stampLevel.level}) proficiency. ${stampLevel.textType} level performance with ${stampLevel.accuracy} Your score: ${score.toFixed(1)}%`;
+  const proficiencyLevel = determineProficiencyLevel(score);
+  return `You demonstrated ${proficiencyLevel.name} (Proficiency Level ${proficiencyLevel.level}) proficiency. ${proficiencyLevel.textType} level performance with ${proficiencyLevel.accuracy} Your score: ${score.toFixed(1)}%`;
 };
 
 export const getCertificateTitle = (cefr: CEFRLevel): string => {
-  // Find the STAMP level that corresponds to this CEFR level
-  const stampLevel = STAMP_LEVELS.find(level => level.cefrLevel === cefr);
+  // Find the Proficiency Level level that corresponds to this CEFR level
+  const proficiencyLevel = PROFICIENCY_LEVELS.find(level => level.cefrLevel === cefr);
   
-  if (stampLevel) {
-    return `${stampLevel.name} Certificate (STAMP Level ${stampLevel.level})`;
+  if (proficiencyLevel) {
+    return `${proficiencyLevel.name} Certificate (Proficiency Level ${proficiencyLevel.level})`;
   }
   
   // Fallback to original titles
@@ -112,14 +112,14 @@ export const getCertificateTitle = (cefr: CEFRLevel): string => {
 
 // Helper function to get phase-specific feedback based on test type/phase
 const getPhaseSpecificFeedback = (score: number, phase: string): { title: string; content: string }[] => {
-  const stampLevel = determineSTAMPLevel(score);
+  const proficiencyLevel = determineProficiencyLevel(score);
   const phaseFeedback: { title: string; content: string }[] = [];
 
   switch (phase.toLowerCase()) {
     case 'reading':
       phaseFeedback.push({
         title: "Reading Comprehension Level",
-        content: `${stampLevel.name} (CEFR ${stampLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
+        content: `${proficiencyLevel.name} (CEFR ${proficiencyLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
       });
       
       if (score >= 76) {
@@ -164,7 +164,7 @@ const getPhaseSpecificFeedback = (score: number, phase: string): { title: string
     case 'listening':
       phaseFeedback.push({
         title: "Listening Comprehension Level",
-        content: `${stampLevel.name} (CEFR ${stampLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
+        content: `${proficiencyLevel.name} (CEFR ${proficiencyLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
       });
       
       if (score >= 76) {
@@ -208,30 +208,30 @@ const getPhaseSpecificFeedback = (score: number, phase: string): { title: string
 
     case 'speaking':
     case 'writing':
-      // Use STAMP feedback for production skills
-      const stampFeedback = generateSTAMPFeedback(score, stampLevel, phase);
+      // Use Proficiency Level feedback for production skills
+      const proficiencyFeedback = generateProficiencyFeedback(score, proficiencyLevel, phase);
       phaseFeedback.push({
-        title: "STAMP Assessment Level",
-        content: `${stampLevel.name} (Level ${stampLevel.level}) - ${stampLevel.textType}`
+        title: "Proficiency Level Assessment Level",
+        content: `${proficiencyLevel.name} (Level ${proficiencyLevel.level}) - ${proficiencyLevel.textType}`
       });
       phaseFeedback.push({
         title: "Language Control",
-        content: stampFeedback.detailed_assessment.language_control
+        content: proficiencyFeedback.detailed_assessment.language_control
       });
       phaseFeedback.push({
         title: "Vocabulary Usage",
-        content: stampFeedback.detailed_assessment.vocabulary
+        content: proficiencyFeedback.detailed_assessment.vocabulary
       });
       phaseFeedback.push({
         title: "Accuracy & Comprehensibility",
-        content: stampFeedback.detailed_assessment.accuracy
+        content: proficiencyFeedback.detailed_assessment.accuracy
       });
       break;
 
     case 'comprehension':
       phaseFeedback.push({
         title: "Comprehension Level",
-        content: `${stampLevel.name} (CEFR ${stampLevel.cefrLevel}) - Combined Reading + Listening Score: ${score.toFixed(1)}%`
+        content: `${proficiencyLevel.name} (CEFR ${proficiencyLevel.cefrLevel}) - Combined Reading + Listening Score: ${score.toFixed(1)}%`
       });
       
       if (score >= 76) {
@@ -261,7 +261,7 @@ const getPhaseSpecificFeedback = (score: number, phase: string): { title: string
     case 'conversation':
       phaseFeedback.push({
         title: "Conversational Fluency Level",
-        content: `${stampLevel.name} (CEFR ${stampLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
+        content: `${proficiencyLevel.name} (CEFR ${proficiencyLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
       });
       
       if (score >= 76) {
@@ -304,11 +304,11 @@ const getPhaseSpecificFeedback = (score: number, phase: string): { title: string
       break;
 
     default:
-      // Generic STAMP feedback for unknown types
-      const defaultFeedback = generateSTAMPFeedback(score, stampLevel, phase);
+      // Generic Proficiency Level feedback for unknown types
+      const defaultFeedback = generateProficiencyFeedback(score, proficiencyLevel, phase);
       phaseFeedback.push({
         title: "Assessment Level",
-        content: `${stampLevel.name} (CEFR ${stampLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
+        content: `${proficiencyLevel.name} (CEFR ${proficiencyLevel.cefrLevel}) - Score: ${score.toFixed(1)}%`
       });
       break;
   }

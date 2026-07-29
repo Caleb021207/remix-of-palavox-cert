@@ -173,7 +173,37 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ── 1b. Idempotency: never write a second overall score ─────────
+    const { data: alreadyFinal } = await supabase
+      .from("scores_overall")
+      .select("*")
+      .eq("session_id", session_id)
+      .maybeSingle();
+
+    if (alreadyFinal) {
+      return new Response(JSON.stringify({
+        success: true,
+        alreadyFinalized: true,
+        result: {
+          overall_score: alreadyFinal.overall_score,
+          overall_cefr: alreadyFinal.overall_cefr,
+          functional_label: alreadyFinal.functional_label,
+          confidence_band: alreadyFinal.confidence_band,
+          retake_recommended: alreadyFinal.retake_recommended,
+          strengths: alreadyFinal.strengths,
+          next_steps: alreadyFinal.next_steps,
+          sections: {
+            reading: { score: alreadyFinal.reading_score, cefr: alreadyFinal.reading_cefr },
+            listening: { score: alreadyFinal.listening_score, cefr: alreadyFinal.listening_cefr },
+            writing: { score: alreadyFinal.writing_score, cefr: alreadyFinal.writing_cefr },
+            speaking: { score: alreadyFinal.speaking_score, cefr: alreadyFinal.speaking_cefr },
+          },
+        },
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     // ── 2. Fetch all completed sections + their scores ──────────────
+
     const { data: sections } = await supabase
       .from("test_sections")
       .select("id, section_type, status")

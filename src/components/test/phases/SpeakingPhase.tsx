@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { evaluatePhaseResponses } from '@/services/test/multiPhaseTestService';
+import { submitPhase } from '@/services/test/secureTestService';
 import { generateSpeakingPrompts } from '@/services/test/speakingPromptService';
 import { TestPhase } from '@/types';
 import { LanguageCode, languages } from '@/config/languages';
@@ -127,12 +127,17 @@ const SpeakingPhase: React.FC<SpeakingPhaseProps> = ({
     try {
       setLoading(true);
       
-      // Pass the language code to evaluation, which will handle base language extraction
-      const result = await evaluatePhaseResponses(TestPhase.Speaking, responses, undefined, languageCode);
+      // Raw transcripts only — scoring and the database write happen server-side.
+      const result = await submitPhase({
+        sessionId,
+        phase: 'speaking',
+        responses,
+        targetLanguage: 'English',
+      });
       onComplete(result.score);
     } catch (error) {
       console.error('Error evaluating speaking phase:', error);
-      toast.error('Failed to evaluate speaking responses');
+      toast.error(error instanceof Error ? error.message : 'Failed to evaluate speaking responses');
     } finally {
       setLoading(false);
     }

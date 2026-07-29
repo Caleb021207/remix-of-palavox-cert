@@ -50,13 +50,18 @@ export function gradeAgainstKey(
   for (const entry of key) {
     const weight = LEVEL_WEIGHTS[entry.level] ?? 1.0;
     for (const q of entry.questions) {
+      // Adaptive sessions pre-generate more items than the candidate ever
+      // sees. Only items the candidate actually answered are graded.
+      const answer = responses?.[q.id];
+      if (answer === undefined || answer === null || answer === "") continue;
       totalWeight += weight;
       totalQuestions += 1;
-      if (q.correctOptionId && responses?.[q.id] === q.correctOptionId) {
+      if (q.correctOptionId && answer === q.correctOptionId) {
         weightedCorrect += weight;
         correct += 1;
       }
     }
+
   }
 
   const score = totalWeight > 0 ? (weightedCorrect / totalWeight) * 100 : 0;
@@ -103,4 +108,13 @@ export function signingSecret(): string {
     throw new Error("CERT_SIGNING_SECRET is not configured");
   }
   return secret;
+}
+
+/** Length-safe, constant-time comparison of two hex signatures. */
+export function timingSafeEqualHex(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }

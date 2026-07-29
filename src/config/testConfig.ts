@@ -93,11 +93,11 @@ export const CERTIFICATE_TIERS = {
   functional: {
     name: 'Functional Fluency Certificate',
     description: 'Can communicate effectively in everyday situations',
-    stampLevel: 5,
+    proficiencyLevel: 5,
     actflLevel: 'Intermediate-Mid',
     cefrLevel: 'A2+/B1',
     minimumPhaseScores: {
-      comprehension: 53,  // Intermediate-Mid threshold (STAMP 5)
+      comprehension: 53,  // Intermediate-Mid threshold (Proficiency Level 5)
       writing: 53,
       conversation: 53
     }
@@ -105,11 +105,11 @@ export const CERTIFICATE_TIERS = {
   professional: {
     name: 'Professional Fluency Certificate',
     description: 'Can work professionally and handle complex communication',
-    stampLevel: 7,
+    proficiencyLevel: 7,
     actflLevel: 'Advanced-Low',
     cefrLevel: 'B2',
     minimumPhaseScores: {
-      comprehension: 73,  // Advanced-Low threshold (STAMP 7)
+      comprehension: 73,  // Advanced-Low threshold (Proficiency Level 7)
       writing: 73,
       conversation: 73
     }

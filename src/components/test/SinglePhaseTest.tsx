@@ -9,6 +9,8 @@ import WritingPhase from './phases/WritingPhase';
 import SpeakingPhase from './phases/SpeakingPhase';
 import ConversationalFluencyPhase from './phases/ConversationalFluencyPhase';
 import { languages, LanguageCode } from '@/config/languages';
+import { finalizeTest } from '@/services/test/secureTestService';
+
 
 interface SinglePhaseTestProps {
   session: TestSession;
@@ -31,7 +33,18 @@ const SinglePhaseTest: React.FC<SinglePhaseTestProps> = ({
     return languages[targetLang as LanguageCode] || languages['english-for-spanish'];
   };
 
-  const handlePhaseComplete = (completedPhase: TestPhase, score: number) => {
+  const handlePhaseComplete = async (completedPhase: TestPhase, score: number) => {
+    setLoading(true);
+    try {
+      // Even for a single section, the overall record is written server-side
+      // so the results page has an authoritative row to read.
+      await finalizeTest(session.id);
+    } catch (error) {
+      console.warn('Could not finalize single-phase session:', error);
+    } finally {
+      setLoading(false);
+    }
+
     const updatedSession: TestSession = {
       ...session,
       phaseScores: {
@@ -44,6 +57,7 @@ const SinglePhaseTest: React.FC<SinglePhaseTestProps> = ({
 
     onComplete(updatedSession, score);
   };
+
 
   const renderPhase = () => {
     const onComplete = (score: number) => {

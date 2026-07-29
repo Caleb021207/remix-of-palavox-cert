@@ -1,6 +1,6 @@
 import { TestSession, TestType, CEFRLevel, ACTFLLevel, TestPhase } from '@/types';
 import { languages } from '@/config/languages';
-import { determineSTAMPLevel } from './stampScoring';
+import { determineProficiencyLevel } from './proficiencyScoring';
 import { CERTIFICATE_TIERS, checkCertificateEligibility } from '@/config/testConfig';
 
 export const generateScoreReport = async (session: TestSession): Promise<Blob> => {
@@ -10,7 +10,7 @@ export const generateScoreReport = async (session: TestSession): Promise<Blob> =
   
   // Set canvas size (A4 proportions in pixels, taller for rubric details)
   canvas.width = 794;  // A4 width in pixels at 96 DPI
-  canvas.height = 1400; // Increased height for STAMP rubric details
+  canvas.height = 1400; // Increased height for Proficiency Level rubric details
   
   // Set background
   ctx.fillStyle = '#ffffff';
@@ -135,18 +135,18 @@ function renderReportContent(ctx: CanvasRenderingContext2D, session: TestSession
   ctx.font = 'bold 16px Arial, sans-serif';
   ctx.fillText(`Language: ${targetLanguage}`, 397, badgeYPos + 25);
   
-  // Section Performance with STAMP Rubric
+  // Section Performance with Proficiency Level Rubric
   const sections = getSectionScores(session);
   let yPos = badgeYPos + 60; // Start after language badge
   
   ctx.textAlign = 'left';
   ctx.font = 'bold 20px Arial, sans-serif';
   ctx.fillStyle = '#4b3f72';
-  ctx.fillText('Section Performance & STAMP Rubric:', 50, yPos);
+  ctx.fillText('Section Performance & Proficiency Level Rubric:', 50, yPos);
   
   yPos += 40;
   sections.forEach((section, index) => {
-    const stampLevel = determineSTAMPLevel(section.score);
+    const proficiencyLevel = determineProficiencyLevel(section.score);
     
     // Section Header with Score
     ctx.font = 'bold 16px Arial, sans-serif';
@@ -155,12 +155,12 @@ function renderReportContent(ctx: CanvasRenderingContext2D, session: TestSession
     
     // Score badge
     ctx.font = 'bold 14px Arial, sans-serif';
-    ctx.fillText(`${section.score.toFixed(1)}% - ${stampLevel.cefrLevel} (${stampLevel.actflLevel})`, 50, yPos + 20);
+    ctx.fillText(`${section.score.toFixed(1)}% - ${proficiencyLevel.cefrLevel} (${proficiencyLevel.actflLevel})`, 50, yPos + 20);
     
-    // STAMP Level
+    // Proficiency Level
     ctx.font = '12px Arial, sans-serif';
     ctx.fillStyle = '#666666';
-    ctx.fillText(`STAMP Level ${stampLevel.level}: ${stampLevel.name} - ${stampLevel.textType}`, 50, yPos + 40);
+    ctx.fillText(`Proficiency Level ${proficiencyLevel.level}: ${proficiencyLevel.name} - ${proficiencyLevel.textType}`, 50, yPos + 40);
     
     yPos += 55;
     
@@ -174,7 +174,7 @@ function renderReportContent(ctx: CanvasRenderingContext2D, session: TestSession
       const lineHeight = 14;
       
       // Language Control
-      const lcLines = wrapText(ctx, `• Language: ${stampLevel.languageControl}`, maxWidth);
+      const lcLines = wrapText(ctx, `• Language: ${proficiencyLevel.languageControl}`, maxWidth);
       lcLines.forEach(line => {
         ctx.fillText(line, 60, yPos);
         yPos += lineHeight;
@@ -183,7 +183,7 @@ function renderReportContent(ctx: CanvasRenderingContext2D, session: TestSession
       yPos += 5;
       
       // Vocabulary
-      const vocabLines = wrapText(ctx, `• Vocabulary: ${stampLevel.vocabulary}`, maxWidth);
+      const vocabLines = wrapText(ctx, `• Vocabulary: ${proficiencyLevel.vocabulary}`, maxWidth);
       vocabLines.forEach(line => {
         ctx.fillText(line, 60, yPos);
         yPos += lineHeight;
@@ -192,7 +192,7 @@ function renderReportContent(ctx: CanvasRenderingContext2D, session: TestSession
       yPos += 5;
       
       // Accuracy
-      const accLines = wrapText(ctx, `• Accuracy: ${stampLevel.accuracy}`, maxWidth);
+      const accLines = wrapText(ctx, `• Accuracy: ${proficiencyLevel.accuracy}`, maxWidth);
       accLines.forEach(line => {
         ctx.fillText(line, 60, yPos);
         yPos += lineHeight;

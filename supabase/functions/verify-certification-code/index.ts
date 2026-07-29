@@ -1,267 +1,138 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { preflight, json } from "../_shared/cors.ts";
+import { hmacHex, signingSecret, timingSafeEqualHex } from "../_shared/grading.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Content-Security-Policy': "default-src 'self'",
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-}
+/**
+ * Verifies a school certification code.
+ *
+ * Uses the SAME secret (CERT_SIGNING_SECRET) and the SAME full-length HMAC as
+ * generate-certification-code, compares in constant time, and enforces expiry
+ * and max_uses from the server-stored row (never from the client).
+ */
 
-interface VerificationRequest {
-  code: string;
-}
-
-interface VerificationResponse {
-  isValid: boolean;
-  usageCount: number;
-  maxUsage: number;
-  schoolId?: string;
-  studentId?: string;
-  error?: string;
-}
-
-// Rate limiting store (in production, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const RATE_LIMIT_WINDOW = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 10;
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
-  const key = `rate_limit:${ip}`;
-  const current = rateLimitStore.get(key);
-  
+  const current = rateLimitStore.get(ip);
   if (!current || now > current.resetTime) {
-    rateLimitStore.set(key, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
     return true;
   }
-  
-  if (current.count >= RATE_LIMIT_MAX_REQUESTS) {
-    return false;
-  }
-  
+  if (current.count >= RATE_LIMIT_MAX_REQUESTS) return false;
   current.count++;
   return true;
 }
 
-function sanitizeInput(input: string): string {
-  if (!input || typeof input !== 'string') {
-    throw new Error('Invalid input');
-  }
-  // Only allow alphanumeric characters and dashes for certification codes
-  return input.trim().replace(/[^a-zA-Z0-9-]/g, '');
-}
-
-function logSecurityEvent(event: string, details: any) {
-  console.log(`[SECURITY] ${event}:`, JSON.stringify(details));
-}
+const fail = (req: Request, error: string, status: number, extra: Record<string, unknown> = {}) =>
+  json(req, { isValid: false, error, usageCount: 0, maxUsage: 0, ...extra }, status);
 
 serve(async (req) => {
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const pre = preflight(req);
+  if (pre) return pre;
 
   try {
-    // Rate limiting check
-    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const clientIP = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "unknown";
     if (!checkRateLimit(clientIP)) {
-      logSecurityEvent('RATE_LIMIT_EXCEEDED', { ip: clientIP });
-      return new Response(
-        JSON.stringify({ isValid: false, error: 'Too many requests', usageCount: 0, maxUsage: 3 }),
-        { 
-          status: 429, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+      return fail(req, "Too many requests", 429);
     }
 
+    let secret: string;
+    try {
+      secret = signingSecret();
+    } catch (_e) {
+      console.error("CERT_SIGNING_SECRET is not configured");
+      return fail(req, "Server configuration error", 500);
+    }
+
+    const contentLength = req.headers.get("content-length");
+    if (contentLength && parseInt(contentLength, 10) > 1024) {
+      return fail(req, "Request too large", 413);
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const raw = typeof body?.code === "string" ? body.code.trim() : "";
+    const code = raw.replace(/[^a-zA-Z0-9-]/g, "");
+    if (!code || code !== raw) {
+      return fail(req, "Invalid code format", 400);
+    }
+
+    // CERT-{schoolId}-{studentId}-{timestamp}-{hmac}
+    const parts = code.split("-");
+    if (parts.length !== 5 || parts[0] !== "CERT") {
+      return fail(req, "Invalid code format", 400);
+    }
+    const [, schoolId, studentId, timestamp, providedSignature] = parts;
+    if (!/^\d+$/.test(timestamp) || !/^[0-9a-f]{64}$/.test(providedSignature)) {
+      return fail(req, "Invalid code format", 400);
+    }
+
+    const computedSignature = await hmacHex(secret, `${schoolId}-${studentId}-${timestamp}`);
+    if (!timingSafeEqualHex(computedSignature, providedSignature)) {
+      console.log("[SECURITY] Signature verification failed", { ip: clientIP });
+      return fail(req, "Invalid code signature", 400);
+    }
+
+    // Service role: expiry, revocation and usage limits are read from the
+    // server-stored row so a client can never widen its own allowance.
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
-    // Content-Length check (max 1KB)
-    const contentLength = req.headers.get('content-length');
-    if (contentLength && parseInt(contentLength) > 1024) {
-      logSecurityEvent('REQUEST_TOO_LARGE', { size: contentLength, ip: clientIP });
-      return new Response(
-        JSON.stringify({ isValid: false, error: 'Request too large', usageCount: 0, maxUsage: 3 }),
-        { 
-          status: 413, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+    const { data: row, error: rowError } = await supabase
+      .from("certification_codes")
+      .select("id, max_uses, expires_at, is_active, school_id, student_id")
+      .eq("code", code)
+      .maybeSingle();
+
+    if (rowError) {
+      console.error("Error loading code:", rowError.message);
+      return fail(req, "Verification unavailable", 500);
+    }
+    if (!row) {
+      return fail(req, "Code not found", 404);
+    }
+    if (row.is_active === false) {
+      return fail(req, "Code has been deactivated", 403);
+    }
+    if (row.expires_at && new Date(row.expires_at).getTime() < Date.now()) {
+      return fail(req, "Code has expired", 403);
     }
 
-    const { code }: VerificationRequest = await req.json();
-    
-    // Sanitize input
-    const sanitizedCode = sanitizeInput(code);
-    if (!sanitizedCode) {
-      logSecurityEvent('INVALID_CODE_INPUT', { originalCode: code, ip: clientIP });
-      return new Response(
-        JSON.stringify({ isValid: false, error: 'Invalid code format', usageCount: 0, maxUsage: 3 }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
+    const maxUsage = typeof row.max_uses === "number" && row.max_uses > 0 ? row.max_uses : 3;
 
-    console.log('Verifying certification code:', code);
-
-    // Parse the certification code format: CERT-{schoolId}-{studentId}-{timestamp}-{hmac}
-    const codeParts = code.split('-');
-    if (codeParts.length < 5 || codeParts[0] !== 'CERT') {
-      return new Response(
-        JSON.stringify({ 
-          isValid: false, 
-          error: 'Invalid code format', 
-          usageCount: 0, 
-          maxUsage: 3 
-        }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    const schoolId = codeParts[1];
-    const studentId = codeParts[2];
-    const timestamp = codeParts[3];
-    const providedSignature = codeParts.slice(4).join('-'); // In case signature contains dashes
-
-    // Verify HMAC signature
-    const secretKey = Deno.env.get('CERT_SECRET_KEY');
-    if (!secretKey) {
-      console.error('CERT_SECRET_KEY not configured');
-      return new Response(
-        JSON.stringify({ 
-          isValid: false, 
-          error: 'Server configuration error', 
-          usageCount: 0, 
-          maxUsage: 3 
-        }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Recreate the payload and compute HMAC
-    const payload = `${schoolId}-${studentId}-${timestamp}`;
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secretKey);
-    const payloadData = encoder.encode(payload);
-    
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      keyData,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
-    );
-    
-    const signature = await crypto.subtle.sign('HMAC', cryptoKey, payloadData);
-    const computedSignature = Array.from(new Uint8Array(signature))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-
-    if (computedSignature !== providedSignature) {
-      console.log('Signature verification failed');
-      return new Response(
-        JSON.stringify({ 
-          isValid: false, 
-          error: 'Invalid code signature', 
-          usageCount: 0, 
-          maxUsage: 3 
-        }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Check usage count in the database
-    const { data: usageRecords, error: usageError } = await supabase
-      .from('code_usage_log')
-      .select('*')
-      .eq('code', code);
+    const { count, error: usageError } = await supabase
+      .from("code_usage_log")
+      .select("id", { count: "exact", head: true })
+      .eq("code", code);
 
     if (usageError) {
-      console.error('Error checking code usage:', usageError);
-      return new Response(
-        JSON.stringify({ 
-          isValid: false, 
-          error: 'Database error', 
-          usageCount: 0, 
-          maxUsage: 3 
-        }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+      console.error("Error checking code usage:", usageError.message);
+      return fail(req, "Verification unavailable", 500);
     }
 
-    const usageCount = usageRecords?.length || 0;
-    const maxUsage = 3;
-
+    const usageCount = count ?? 0;
     if (usageCount >= maxUsage) {
-      console.log(`Code ${code} has exceeded usage limit: ${usageCount}/${maxUsage}`);
-      return new Response(
-        JSON.stringify({ 
-          isValid: false, 
-          error: 'Code usage limit exceeded', 
-          usageCount, 
-          maxUsage,
-          schoolId,
-          studentId
-        }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+      return json(
+        req,
+        { isValid: false, error: "Code usage limit exceeded", usageCount, maxUsage },
+        403,
       );
     }
 
-    // Code is valid and has remaining uses
-    const response: VerificationResponse = {
+    return json(req, {
       isValid: true,
       usageCount,
       maxUsage,
-      schoolId,
-      studentId
-    };
-
-    console.log('Code verification successful:', response);
-
-    return new Response(
-      JSON.stringify(response),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
-
+      schoolId: row.school_id ?? schoolId,
+      studentId: row.student_id ?? studentId,
+    });
   } catch (error) {
-    console.error('Error in verify-certification-code:', error);
-    return new Response(
-      JSON.stringify({ 
-        isValid: false, 
-        error: 'Internal server error', 
-        usageCount: 0, 
-        maxUsage: 3 
-      }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    console.error("Error in verify-certification-code:", error instanceof Error ? error.message : error);
+    return fail(req, "Internal server error", 500);
   }
-})
+});

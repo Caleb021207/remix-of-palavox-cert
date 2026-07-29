@@ -105,6 +105,19 @@ Deno.serve(async (req) => {
         recommendedCEFR: scoring.recommendedCEFR,
         validatorFlags: validatorResult?.flags,
       };
+    } else if (phase === "conversation") {
+      const r = responses as { messages?: Array<{ content: string; timestamp?: string }>; duration?: number };
+      const result = await callFunction("evaluate-conversation", {
+        userMessages: (r.messages ?? []).slice(0, 200).map((m) => ({
+          content: String(m.content ?? "").slice(0, 4000),
+          timestamp: m.timestamp,
+        })),
+        duration: Number(r.duration) || 0,
+        targetLanguage: targetLanguage ?? "English",
+      });
+      score = Number(result.score) || 0;
+      rubric = result.traits ?? null;
+      feedback = { stats: result.stats, notes: result.notes };
     } else {
       const result = await callFunction("evaluate-test-responses", {
         phase,
@@ -114,6 +127,7 @@ Deno.serve(async (req) => {
       score = Number(result.score) || 0;
       feedback = result.feedback ?? {};
     }
+
 
     score = Math.max(0, Math.min(100, score));
     const levels = calculateLevel(score);

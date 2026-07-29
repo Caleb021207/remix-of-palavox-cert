@@ -51,7 +51,7 @@ const CertificationCodeEntry: React.FC<CertificationCodeEntryProps> = ({
             className="text-center"
           />
           <p className="text-sm text-muted-foreground mt-2 text-center">
-            Format: CERT-SCHOOL-STUDENT-TIMESTAMP-SIGNATURE
+            Format: CERT-SCHOOL-STUDENT-TIMEProficiency Level-SIGNATURE
           </p>
         </div>
 

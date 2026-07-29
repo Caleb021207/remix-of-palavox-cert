@@ -1,147 +1,118 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { corsFor, preflight, json } from "../_shared/cors.ts";
+import { hmacHex, signingSecret, timingSafeEqualHex } from "../_shared/grading.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
+/**
+ * Issues a school certification code.
+ *
+ * Signing is unified with verify-certification-code: ONE secret
+ * (CERT_SIGNING_SECRET), the FULL 64-character SHA-256 HMAC, and no
+ * development fallback — the function refuses to run if the secret is unset.
+ */
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const pre = preflight(req);
+  if (pre) return pre;
 
   try {
+    // Fail closed if the signing secret is missing.
+    let secret: string;
+    try {
+      secret = signingSecret();
+    } catch (_e) {
+      console.error("CERT_SIGNING_SECRET is not configured");
+      return json(req, { error: "Server configuration error" }, 500);
+    }
+
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) return json(req, { error: "Unauthorized" }, 401);
+
     const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
-        },
-      }
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { global: { headers: { Authorization: authHeader } } },
     );
 
-    // Get authenticated user
-    const {
-      data: { user },
-      error: authError,
-    } = await supabaseClient.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) return json(req, { error: "Unauthorized" }, 401);
 
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    const body = await req.json().catch(() => ({}));
+    const { schoolId, studentId, studentName, notes, expiresInDays, maxUses } = body ?? {};
+
+    if (typeof schoolId !== "string" || typeof studentId !== "string" || !schoolId || !studentId) {
+      return json(req, { error: "schoolId and studentId are required" }, 400);
+    }
+    // Codes are dash-delimited, so the parts must not contain dashes themselves.
+    if (!/^[A-Za-z0-9_]+$/.test(schoolId) || !/^[A-Za-z0-9_]+$/.test(studentId)) {
+      return json(req, { error: "schoolId and studentId must be alphanumeric" }, 400);
     }
 
-    const { schoolId, studentId, studentName, notes, expiresInDays, maxUses } = await req.json();
+    const days = Number.isFinite(Number(expiresInDays)) ? Math.trunc(Number(expiresInDays)) : 365;
+    const uses = Number.isFinite(Number(maxUses)) ? Math.trunc(Number(maxUses)) : 3;
+    if (days <= 0 || days > 3650) return json(req, { error: "expiresInDays out of range" }, 400);
+    if (uses <= 0 || uses > 100) return json(req, { error: "maxUses out of range" }, 400);
 
-    // Validate input
-    if (!schoolId || !studentId) {
-      return new Response(
-        JSON.stringify({ error: 'schoolId and studentId are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Check if user is admin or school admin for this school
+    // Authorisation: admin, or school_admin of this school.
     const { data: roles, error: roleError } = await supabaseClient
-      .from('user_roles')
-      .select('role, school_id')
-      .eq('user_id', user.id);
+      .from("user_roles")
+      .select("role, school_id")
+      .eq("user_id", user.id);
 
     if (roleError) {
-      console.error('Error checking roles:', roleError);
-      return new Response(
-        JSON.stringify({ error: 'Error checking permissions' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      console.error("Error checking roles:", roleError.message);
+      return json(req, { error: "Error checking permissions" }, 500);
     }
 
-    const isAdmin = roles?.some(r => r.role === 'admin');
+    const isAdmin = roles?.some((r: { role: string }) => r.role === "admin");
     const isSchoolAdmin = roles?.some(
-      r => r.role === 'school_admin' && (r.school_id === schoolId || r.school_id === null)
+      (r: { role: string; school_id: string | null }) =>
+        r.role === "school_admin" && (r.school_id === schoolId || r.school_id === null),
     );
 
     if (!isAdmin && !isSchoolAdmin) {
-      return new Response(
-        JSON.stringify({ error: 'Forbidden: You do not have permission to generate codes for this school' }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return json(req, { error: "Forbidden: you cannot generate codes for this school" }, 403);
     }
 
-    // Generate code with HMAC signature
     const timestamp = Date.now();
     const message = `${schoolId}-${studentId}-${timestamp}`;
-    const secret = Deno.env.get('CERT_CODE_SECRET') || 'default-secret-change-in-production';
-    
-    const key = await crypto.subtle.importKey(
-      'raw',
-      new TextEncoder().encode(secret),
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
-    );
-    
-    const signature = await crypto.subtle.sign(
-      'HMAC',
-      key,
-      new TextEncoder().encode(message)
-    );
-    
-    const signatureHex = Array.from(new Uint8Array(signature))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('')
-      .slice(0, 8);
-    
+    // FULL hmac, not truncated — verify recomputes and compares the same length.
+    const signatureHex = await hmacHex(secret, message);
+
     const code = `CERT-${schoolId}-${studentId}-${timestamp}-${signatureHex}`;
 
-    // Calculate expiration date if specified
-    const expiresAt = expiresInDays 
-      ? new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000).toISOString()
-      : null;
+    // Sanity check: the code we just issued must verify against our own logic.
+    if (!timingSafeEqualHex(signatureHex, await hmacHex(secret, message))) {
+      return json(req, { error: "Signing failure" }, 500);
+    }
 
-    // Insert code into database
+    const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+
     const { data: certCode, error: insertError } = await supabaseClient
-      .from('certification_codes')
+      .from("certification_codes")
       .insert({
         code,
         school_id: schoolId,
         student_id: studentId,
-        student_name: studentName || null,
+        student_name: typeof studentName === "string" ? studentName.slice(0, 200) : null,
         generated_by: user.id,
         expires_at: expiresAt,
-        max_uses: maxUses || 3,
-        notes: notes || null,
+        max_uses: uses,
+        notes: typeof notes === "string" ? notes.slice(0, 1000) : null,
       })
       .select()
       .single();
 
     if (insertError) {
-      console.error('Error inserting code:', insertError);
-      return new Response(
-        JSON.stringify({ error: 'Error generating code', details: insertError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      console.error("Error inserting code:", insertError.message);
+      return json(req, { error: "Error generating code" }, 500);
     }
 
-    console.log('Generated certification code:', code, 'for student:', studentId);
-
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        code,
-        certificationCode: certCode
-      }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ success: true, code, certificationCode: certCode }),
+      { status: 200, headers: { ...corsFor(req), "Content-Type": "application/json" } },
     );
-
   } catch (error) {
-    console.error('Unexpected error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error', details: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    console.error("Unexpected error:", error instanceof Error ? error.message : error);
+    return json(req, { error: "Internal server error" }, 500);
   }
 });
