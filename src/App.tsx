@@ -34,6 +34,23 @@ const App = () => (
           <Route path="/results" element={<Results />} />
           <Route path="/verify" element={<VerifyCertificate />} />
           <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <StudentProgress />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teacher"
+            element={
+              <ProtectedRoute>
+                <TeacherDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/admin"
             element={
               <ProtectedRoute requireRole="admin">
