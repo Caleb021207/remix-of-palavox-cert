@@ -51,11 +51,14 @@ export type Database = {
           cefr_level: Database["public"]["Enums"]["cefr_level"]
           expires_at: string | null
           functional_label: string
+          holder_name: string | null
           id: string
           issued_at: string
+          overall_score: number | null
           pdf_storage_path: string | null
           revoked: boolean | null
           session_id: string
+          signature: string | null
           user_id: string
           verification_code: string
         }
@@ -63,11 +66,14 @@ export type Database = {
           cefr_level: Database["public"]["Enums"]["cefr_level"]
           expires_at?: string | null
           functional_label: string
+          holder_name?: string | null
           id?: string
           issued_at?: string
+          overall_score?: number | null
           pdf_storage_path?: string | null
           revoked?: boolean | null
           session_id: string
+          signature?: string | null
           user_id: string
           verification_code: string
         }
@@ -75,11 +81,14 @@ export type Database = {
           cefr_level?: Database["public"]["Enums"]["cefr_level"]
           expires_at?: string | null
           functional_label?: string
+          holder_name?: string | null
           id?: string
           issued_at?: string
+          overall_score?: number | null
           pdf_storage_path?: string | null
           revoked?: boolean | null
           session_id?: string
+          signature?: string | null
           user_id?: string
           verification_code?: string
         }
@@ -120,6 +129,33 @@ export type Database = {
           id?: string
           ip_address?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      content_answer_keys: {
+        Row: {
+          answer_key: Json
+          created_at: string
+          id: string
+          section: string
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          answer_key: Json
+          created_at?: string
+          id?: string
+          section: string
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          answer_key?: Json
+          created_at?: string
+          id?: string
+          section?: string
+          session_id?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1024,7 +1060,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "school_admin"
       attempt_status: "in_progress" | "completed" | "abandoned" | "flagged"
       cefr_level:
         | "Pre-A1"
@@ -1184,7 +1220,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "school_admin"],
       attempt_status: ["in_progress", "completed", "abandoned", "flagged"],
       cefr_level: [
         "Pre-A1",

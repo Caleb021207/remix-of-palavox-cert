@@ -4,6 +4,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { ReadingContent, LevelConfig } from './types.ts';
 import { determineLanguages } from './languageUtils.ts';
 import { generateReadingContent } from './contentGenerator.ts';
+import { corsFor, preflight } from '../_shared/cors.ts';
+import { getUser, ownsSession } from '../_shared/auth.ts';
+import { stripAnswers, buildAnswerKey } from '../_shared/grading.ts';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
@@ -18,11 +21,6 @@ console.log('🔑 API Keys available:', {
   hasOpenAI: !!openAIApiKey,
   hasLovable: !!lovableApiKey
 });
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 // Generate audio using Azure TTS
 async function generateAudioForPassage(text: string, level: string): Promise<string | null> {
@@ -82,11 +80,19 @@ async function generateAudioForPassage(text: string, level: string): Promise<str
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const pre = preflight(req);
+  if (pre) return pre;
+
+  const corsHeaders = corsFor(req);
 
   try {
+    const user = await getUser(req);
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
     const { 
       uiLanguage = 'english', 
       baseLanguage = 'Spanish', 
@@ -97,6 +103,16 @@ serve(async (req) => {
       targetLevel = 'B1'
     } = await req.json();
     const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+
+    if (sessionId) {
+      const owns = await ownsSession(user.id, sessionId);
+      if (!owns.ok) {
+        return new Response(JSON.stringify({ error: 'Session not found' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
     
     console.log('🧠 Fetching comprehension content:', { 
       uiLanguage, 
@@ -360,8 +376,27 @@ serve(async (req) => {
 
     console.log('🚀 All comprehension content ready (with audio if requested)');
 
+    // Persist the answer key server-side and strip correct answers from the payload
+    const answerKey = buildAnswerKey(allContent);
+    if (sessionId) {
+      const { error: keyError } = await supabaseClient.from('content_answer_keys').insert({
+        session_id: sessionId,
+        user_id: user.id,
+        section,
+        answer_key: answerKey,
+      });
+      if (keyError) {
+        console.error('Failed to persist answer key:', keyError.message);
+        return new Response(JSON.stringify({ error: 'Could not prepare test content' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+    const safeContent = stripAnswers(allContent);
+
     return new Response(JSON.stringify({ 
-      content: allContent,
+      content: safeContent,
       cached: true,
       adaptiveMode,
       targetLevel: adaptiveMode ? targetLevel : undefined,

@@ -1,18 +1,25 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsFor, preflight } from "../_shared/cors.ts";
+import { getUser } from "../_shared/auth.ts";
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+  const pre = preflight(req);
+  if (pre) return pre;
+
+  const corsHeaders = corsFor(req);
+
+  // Never hand an OpenAI realtime token to an unauthenticated caller.
+  const user = await getUser(req);
+  if (!user) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
   const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
   
-  console.log('🔍 Checking API key...', OPENAI_API_KEY ? `Key found (${OPENAI_API_KEY.substring(0, 7)}...)` : 'KEY IS UNDEFINED/MISSING');
+  console.log('🔍 Checking API key configuration...', OPENAI_API_KEY ? 'configured' : 'MISSING');
 
   if (!OPENAI_API_KEY || OPENAI_API_KEY.trim() === '') {
     console.error('❌ OPENAI_API_KEY is not set or empty');
