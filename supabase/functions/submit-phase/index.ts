@@ -64,7 +64,107 @@ Deno.serve(async (req) => {
     let feedback: Record<string, unknown> = {};
     let rubric: Record<string, unknown> | null = null;
 
-    if (phase === "comprehension" || phase === "reading" || phase === "listening") {
+    const raw = responses as Record<string, unknown>;
+    const formId = typeof raw.formId === "string" ? raw.formId : null;
+
+    if (formId && (phase === "reading" || phase === "listening" || phase === "comprehension")) {
+      // ── Item-bank form: grade against item_options (server-only keys) ──
+      const answers = (raw.answers ?? {}) as Record<string, string>;
+      const skill = phase === "listening" ? "listening" : "reading";
+
+      const { data: formItems, error: fiErr } = await svc
+        .from("form_items")
+        .select("item_id, is_trial, position")
+        .eq("form_id", formId)
+        .order("position", { ascending: true });
+      if (fiErr) throw new Error(fiErr.message);
+      if (!formItems || formItems.length === 0) {
+        return json(req, { error: "Unknown practice form" }, 409);
+      }
+
+      const itemIds = formItems.map((f) => f.item_id);
+      const { data: keyOptions, error: koErr } = await svc
+        .from("item_options")
+        .select("id, item_id, is_correct")
+        .in("item_id", itemIds);
+      if (koErr) throw new Error(koErr.message);
+
+      const correctByItem = new Map<string, string>();
+      for (const o of keyOptions ?? []) {
+        if (o.is_correct) correctByItem.set(o.item_id, o.id);
+      }
+
+      const graded: ScoredResponse[] = [];
+      const rows: Record<string, unknown>[] = [];
+      const answeredItemIds: string[] = [];
+
+      for (const fi of formItems) {
+        const selected = answers[fi.item_id];
+        if (!selected) continue;
+        const isCorrect = correctByItem.get(fi.item_id) === selected;
+        graded.push({ itemId: fi.item_id, isCorrect, isTrial: !!fi.is_trial });
+        answeredItemIds.push(fi.item_id);
+        rows.push({
+          session_id: sessionId,
+          user_id: session.user_id,
+          form_id: formId,
+          item_id: fi.item_id,
+          selected_option_id: selected,
+          is_correct: isCorrect,
+          is_trial: !!fi.is_trial,
+        });
+      }
+
+      if (rows.length > 0) {
+        await svc.from("item_responses").insert(rows as never);
+        // Trial responses are recorded and counted for calibration but never scored.
+        await svc.rpc("bump_item_responses", { _item_ids: answeredItemIds });
+      }
+
+      const result = scoreSession(graded);
+      score = result.scaledScore;
+
+      const { data: cuts } = await svc
+        .from("cut_scores")
+        .select("skill, wida_level, min_scaled, max_scaled, cefr_band")
+        .eq("skill", skill)
+        .eq("active", true);
+
+      const band = mapToBand((cuts ?? []) as CutScoreRow[], result.scaledScore, result.sem);
+
+      await svc.from("proficiency_results").upsert(
+        {
+          user_id: session.user_id,
+          session_id: sessionId,
+          form_id: formId,
+          skill,
+          scaled_score: result.scaledScore,
+          sem: result.sem,
+          wida_level: band.widaLevel,
+          wida_low: band.widaLow,
+          wida_high: band.widaHigh,
+          cefr_band: band.cefrBand,
+          n_scored: result.nScored,
+          n_correct: result.nCorrect,
+        } as never,
+        { onConflict: "session_id,skill" },
+      );
+
+      feedback = {
+        overall: "Practice / formative result — not an official proficiency measure.",
+        scaledScore: result.scaledScore,
+        sem: result.sem,
+        nScored: result.nScored,
+        nCorrect: result.nCorrect,
+        trialItems: graded.filter((g) => g.isTrial).length,
+        scoringMethod: result.method,
+        band: band.label,
+        widaLevel: band.widaLevel,
+        widaLow: band.widaLow,
+        widaHigh: band.widaHigh,
+        cefrBand: band.cefrBand,
+      };
+    } else if (phase === "comprehension" || phase === "reading" || phase === "listening") {
       // Grade against the trusted, server-stored answer key
       const { data: keyRows } = await svc
         .from("content_answer_keys")
