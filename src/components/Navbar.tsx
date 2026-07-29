@@ -42,6 +42,22 @@ const Navbar = () => {
                   {navbarTexts.takeTest}
                 </Button>
               </Link>
+
+              {user && (
+                <>
+                  <Link to="/progress">
+                    <Button variant="ghost" className="text-gray-600 hover:text-palavox-purple">
+                      My Progress
+                    </Button>
+                  </Link>
+                  <Link to="/teacher">
+                    <Button variant="ghost" className="text-gray-600 hover:text-palavox-purple">
+                      Teacher
+                    </Button>
+                  </Link>
+                </>
+              )}
+
               
               <LanguageSelector />
               

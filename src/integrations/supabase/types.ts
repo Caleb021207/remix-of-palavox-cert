@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      benchmark_windows: {
+        Row: {
+          active: boolean
+          created_at: string
+          ends_on: string
+          id: string
+          name: string
+          school_year: string
+          sequence: number
+          starts_on: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          ends_on: string
+          id?: string
+          name: string
+          school_year: string
+          sequence?: number
+          starts_on: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          ends_on?: string
+          id?: string
+          name?: string
+          school_year?: string
+          sequence?: number
+          starts_on?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blueprints: {
         Row: {
           created_at: string
@@ -200,6 +236,68 @@ export type Database = {
           school_id?: string
           student_id?: string
           student_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      class_students: {
+        Row: {
+          class_id: string
+          created_at: string
+          display_name: string | null
+          id: string
+          student_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          student_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_students_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classes: {
+        Row: {
+          created_at: string
+          grade_band: string | null
+          id: string
+          name: string
+          school_id: string | null
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          grade_band?: string | null
+          id?: string
+          name: string
+          school_id?: string | null
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          grade_band?: string | null
+          id?: string
+          name?: string
+          school_id?: string | null
+          teacher_id?: string
           updated_at?: string
         }
         Relationships: []
@@ -962,6 +1060,7 @@ export type Database = {
           wida_high: number | null
           wida_level: number | null
           wida_low: number | null
+          window_id: string | null
         }
         Insert: {
           cefr_band?: string | null
@@ -980,6 +1079,7 @@ export type Database = {
           wida_high?: number | null
           wida_level?: number | null
           wida_low?: number | null
+          window_id?: string | null
         }
         Update: {
           cefr_band?: string | null
@@ -998,8 +1098,17 @@ export type Database = {
           wida_high?: number | null
           wida_level?: number | null
           wida_low?: number | null
+          window_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "proficiency_results_window_id_fkey"
+            columns: ["window_id"]
+            isOneToOne: false
+            referencedRelation: "benchmark_windows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -1080,6 +1189,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      readiness_thresholds: {
+        Row: {
+          actfl_level: string | null
+          active: boolean
+          approaching_margin: number
+          cefr_min: string | null
+          created_at: string
+          id: string
+          kind: string
+          label: string
+          updated_at: string
+          wida_composite_min: number | null
+        }
+        Insert: {
+          actfl_level?: string | null
+          active?: boolean
+          approaching_margin?: number
+          cefr_min?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          label: string
+          updated_at?: string
+          wida_composite_min?: number | null
+        }
+        Update: {
+          actfl_level?: string | null
+          active?: boolean
+          approaching_margin?: number
+          cefr_min?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          updated_at?: string
+          wida_composite_min?: number | null
+        }
+        Relationships: []
       }
       responses_mcq: {
         Row: {
@@ -1651,7 +1799,58 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_can_do_progress: {
+        Row: {
+          can_do_id: string | null
+          framework: string | null
+          last_practiced_at: string | null
+          level: string | null
+          n_attempts: number | null
+          n_correct: number | null
+          skill_or_mode: string | null
+          statement: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_can_do_map_can_do_id_fkey"
+            columns: ["can_do_id"]
+            isOneToOne: false
+            referencedRelation: "can_do_statements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_skill_trend: {
+        Row: {
+          cefr_band: string | null
+          created_at: string | null
+          n_correct: number | null
+          n_scored: number | null
+          scaled_score: number | null
+          school_year: string | null
+          sem: number | null
+          skill: string | null
+          user_id: string | null
+          wida_high: number | null
+          wida_level: number | null
+          wida_low: number | null
+          window_id: string | null
+          window_name: string | null
+          window_sequence: number | null
+          window_starts_on: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proficiency_results_window_id_fkey"
+            columns: ["window_id"]
+            isOneToOne: false
+            referencedRelation: "benchmark_windows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       bump_item_exposure: { Args: { _item_ids: string[] }; Returns: undefined }
@@ -1663,6 +1862,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_class_teacher_of: { Args: { _student_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "school_admin"

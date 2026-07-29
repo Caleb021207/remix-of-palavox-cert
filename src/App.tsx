@@ -16,7 +16,10 @@ import SchoolServiceAgreement from "./pages/SchoolServiceAgreement";
 import StudentDataPortal from "./pages/StudentDataPortal";
 import SchoolDashboard from "./pages/SchoolDashboard";
 import VerifyCertificate from "./pages/VerifyCertificate";
+import StudentProgress from "./pages/StudentProgress";
+import TeacherDashboard from "./pages/TeacherDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,23 @@ const App = () => (
           <Route path="/test" element={<Test />} />
           <Route path="/results" element={<Results />} />
           <Route path="/verify" element={<VerifyCertificate />} />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <StudentProgress />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/teacher"
+            element={
+              <ProtectedRoute>
+                <TeacherDashboard />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/admin"
             element={
