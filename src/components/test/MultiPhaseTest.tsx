@@ -11,7 +11,6 @@ import { useUILanguage } from '@/contexts/UILanguageContext';
 import ComprehensionPhase from './phases/ComprehensionPhase';
 import WritingPhase from './phases/WritingPhase';
 import ConversationalFluencyPhase from './phases/ConversationalFluencyPhase';
-import { determineProficiencyLevel } from '@/utils/proficiencyScoring';
 import { finalizeTest } from '@/services/test/secureTestService';
 
 interface MultiPhaseTestProps {
@@ -216,7 +215,7 @@ const MultiPhaseTest: React.FC<MultiPhaseTestProps> = ({ session, onComplete }) 
                       {score.toFixed(1)}%
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {determineProficiencyLevel(score).name}
+                      {getTranslation('test.multiPhase.serverScored', 'Scored by our servers')}
                     </div>
                   </div>
                 ) : null;
