@@ -45,11 +45,11 @@ Deno.serve(async (req) => {
     // Holder name: profile first, then auth metadata — never a placeholder.
     const { data: profile } = await svc
       .from("profiles")
-      .select("full_name")
-      .eq("id", user.id)
+      .select("display_name")
+      .eq("user_id", user.id)
       .maybeSingle();
 
-    let holderName = (profile as { full_name?: string } | null)?.full_name ?? "";
+    let holderName = (profile as { display_name?: string } | null)?.display_name ?? "";
     if (!holderName) {
       const { data: authUser } = await svc.auth.admin.getUserById(user.id);
       holderName =
@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
 
     const certId = crypto.randomUUID();
     const issuedAt = new Date().toISOString();
-    const cefr = (overall as { cefr_level: string }).cefr_level;
+    const cefr = (overall as { overall_cefr: string }).overall_cefr;
     const label = (overall as { functional_label?: string }).functional_label ?? "";
     const score = (overall as { overall_score?: number }).overall_score ?? null;
 
