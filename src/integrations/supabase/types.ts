@@ -102,6 +102,81 @@ export type Database = {
           },
         ]
       }
+      certification_codes: {
+        Row: {
+          code: string
+          created_at: string
+          expires_at: string | null
+          generated_by: string | null
+          id: string
+          is_active: boolean
+          max_uses: number
+          notes: string | null
+          school_id: string
+          student_id: string
+          student_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          generated_by?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number
+          notes?: string | null
+          school_id: string
+          student_id: string
+          student_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          generated_by?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number
+          notes?: string | null
+          school_id?: string
+          student_id?: string
+          student_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      code_usage_log: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          school_id: string
+          student_id: string
+          test_session_id: string
+          used_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          school_id: string
+          student_id: string
+          test_session_id: string
+          used_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          school_id?: string
+          student_id?: string
+          test_session_id?: string
+          used_at?: string
+        }
+        Relationships: []
+      }
       consent_records: {
         Row: {
           consent_type: string
@@ -948,16 +1023,19 @@ export type Database = {
         Row: {
           id: string
           role: Database["public"]["Enums"]["app_role"]
+          school_id: string | null
           user_id: string
         }
         Insert: {
           id?: string
           role: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
           user_id: string
         }
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          school_id?: string | null
           user_id?: string
         }
         Relationships: []
