@@ -256,7 +256,6 @@ export const useComprehensionPhase = ({
     skipAudio,
     totalQuestions,
     answeredQuestions,
-    readingScore,
     isReadingComplete: currentPhase === 'listening'
   };
 };
