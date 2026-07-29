@@ -14,6 +14,8 @@ import TermsOfService from "./pages/TermsOfService";
 import SchoolServiceAgreement from "./pages/SchoolServiceAgreement";
 import StudentDataPortal from "./pages/StudentDataPortal";
 import SchoolDashboard from "./pages/SchoolDashboard";
+import VerifyCertificate from "./pages/VerifyCertificate";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -26,8 +28,23 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/test" element={<Test />} />
           <Route path="/results" element={<Results />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/generate-all" element={<GenerateAll />} />
+          <Route path="/verify" element={<VerifyCertificate />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireRole="admin">
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/generate-all"
+            element={
+              <ProtectedRoute requireRole="admin">
+                <GenerateAll />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/school-service-agreement" element={<SchoolServiceAgreement />} />
