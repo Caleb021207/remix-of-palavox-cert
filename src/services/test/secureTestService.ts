@@ -144,10 +144,22 @@ export async function verifyCertificate(idOrCode: string): Promise<VerificationR
   const { data, error } = await supabase.functions.invoke('verify-certificate', {
     body: idOrCode.startsWith('PVX-') ? { code: idOrCode } : { id: idOrCode },
   });
-  if (error && !data) {
-    return { valid: false, error: 'Verification service is unavailable. Please try again.' };
+
+  if (data) return data as VerificationResult;
+
+  // A "not found" / "revoked" answer comes back as a non-2xx response, which the
+  // client surfaces as an error. Read the server's JSON body so the page can show
+  // the real reason instead of a generic outage message.
+  const context = (error as { context?: Response } | null)?.context;
+  if (context && typeof context.json === 'function') {
+    try {
+      return (await context.json()) as VerificationResult;
+    } catch {
+      /* fall through */
+    }
   }
-  return (data ?? { valid: false, error: 'No response from verification service' }) as VerificationResult;
+
+  return { valid: false, error: 'Verification service is unavailable. Please try again.' };
 }
 
 /**
