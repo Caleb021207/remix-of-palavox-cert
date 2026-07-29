@@ -1,8 +1,8 @@
 
 import { TestSession, CEFRLevel, ACTFLLevel } from '@/types';
 
-// STAMP Level definitions with detailed criteria
-export interface STAMPLevel {
+// Proficiency Level Level definitions with detailed criteria
+export interface ProficiencyLevel {
   level: number;
   name: string;
   actflLevel: ACTFLLevel;
@@ -14,7 +14,7 @@ export interface STAMPLevel {
   scoreRange: [number, number]; // min and max percentage scores
 }
 
-export const STAMP_LEVELS: STAMPLevel[] = [
+export const PROFICIENCY_LEVELS: ProficiencyLevel[] = [
   {
     level: 1,
     name: 'Novice-Low',
@@ -105,14 +105,14 @@ export const STAMP_LEVELS: STAMPLevel[] = [
   }
 ];
 
-export const determineSTAMPLevel = (score: number): STAMPLevel => {
-  console.log('🎯 STAMP Level Determination:', { score });
+export const determineProficiencyLevel = (score: number): ProficiencyLevel => {
+  console.log('🎯 Proficiency Level Level Determination:', { score });
   
-  const level = STAMP_LEVELS.find(level => 
+  const level = PROFICIENCY_LEVELS.find(level => 
     score >= level.scoreRange[0] && score <= level.scoreRange[1]
-  ) || STAMP_LEVELS[0]; // Default to Novice-Low if no match
+  ) || PROFICIENCY_LEVELS[0]; // Default to Novice-Low if no match
   
-  console.log('✅ Determined STAMP Level:', { 
+  console.log('✅ Determined Proficiency Level Level:', { 
     score, 
     stampLevel: level.level, 
     name: level.name, 
@@ -123,13 +123,13 @@ export const determineSTAMPLevel = (score: number): STAMPLevel => {
   return level;
 };
 
-export const generateSTAMPFeedback = (
+export const generateProficiencyFeedback = (
   score: number, 
-  stampLevel: STAMPLevel,
+  stampLevel: ProficiencyLevel,
   testType: string
 ): any => {
   const feedback: any = {
-    summary: `You demonstrated ${stampLevel.name} (STAMP Level ${stampLevel.level}) proficiency with a score of ${score.toFixed(1)}%.`,
+    summary: `You demonstrated ${stampLevel.name} (Proficiency Level Level ${stampLevel.level}) proficiency with a score of ${score.toFixed(1)}%.`,
     stamp_level: stampLevel.level,
     stamp_name: stampLevel.name,
     text_type: stampLevel.textType,
@@ -142,7 +142,7 @@ export const generateSTAMPFeedback = (
     }
   };
 
-  // Generate specific feedback based on STAMP level
+  // Generate specific feedback based on Proficiency Level level
   if (stampLevel.level <= 2) {
     feedback.strengths.push("Shows basic understanding of individual words and simple phrases");
     feedback.strengths.push("Demonstrates effort in attempting to communicate");
