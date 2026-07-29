@@ -16,7 +16,10 @@ import SchoolServiceAgreement from "./pages/SchoolServiceAgreement";
 import StudentDataPortal from "./pages/StudentDataPortal";
 import SchoolDashboard from "./pages/SchoolDashboard";
 import VerifyCertificate from "./pages/VerifyCertificate";
+import StudentProgress from "./pages/StudentProgress";
+import TeacherDashboard from "./pages/TeacherDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 
 const queryClient = new QueryClient();
 
