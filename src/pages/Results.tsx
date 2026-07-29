@@ -256,6 +256,13 @@ const Results = () => {
                 </div>
               </div>
 
+              {sessionId && (
+                <>
+                  <Separator className="my-8" />
+                  <ProficiencyBands sessionId={sessionId} />
+                </>
+              )}
+
               {sections.length > 0 && (
                 <>
                   <Separator className="my-8" />
