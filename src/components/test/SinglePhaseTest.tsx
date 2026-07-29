@@ -75,6 +75,13 @@ const SinglePhaseTest: React.FC<SinglePhaseTestProps> = ({
             sessionId={session.id}
             languageCode={languageCode}
             englishVariant={session.englishVariant}
+            skill={
+              phase === TestPhase.Reading
+                ? 'reading'
+                : phase === TestPhase.Listening
+                  ? 'listening'
+                  : 'both'
+            }
             onComplete={onComplete}
           />
         );
