@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
 import GradingRubric from '@/components/test/GradingRubric';
+import ProficiencyBands from '@/components/test/ProficiencyBands';
 import { Award, CheckCircle, User, FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUILanguage } from '@/contexts/UILanguageContext';
