@@ -8,7 +8,6 @@ import { Progress } from '@/components/ui/progress';
 import { BookOpen, Headphones, Loader2 } from 'lucide-react';
 import { useBankPhase } from '@/hooks/test/useBankPhase';
 import type { BankSkill } from '@/services/test/itemBankService';
-import AudioPlayer from './listening/AudioPlayer';
 
 interface BankComprehensionPhaseProps {
   sessionId: string;
