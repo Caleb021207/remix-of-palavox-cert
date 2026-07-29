@@ -61,3 +61,16 @@ export async function ownsSession(userId: string, sessionId: string) {
   }
   return { ok: true as const, session: data };
 }
+
+/** True when the caller is our own backend (service-role bearer token). */
+export function isServiceCall(req: Request): boolean {
+  const header = req.headers.get("Authorization") ?? "";
+  const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  return !!key && header === `Bearer ${key}`;
+}
+
+/** Allows either an authenticated end user or an internal service call. */
+export async function requireCaller(req: Request): Promise<AuthedUser | null> {
+  if (isServiceCall(req)) return { id: "service" };
+  return await getUser(req);
+}
