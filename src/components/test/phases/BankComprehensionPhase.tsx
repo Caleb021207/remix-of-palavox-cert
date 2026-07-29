@@ -92,7 +92,9 @@ const BankComprehensionPhase: React.FC<BankComprehensionPhaseProps> = ({
           </CardHeader>
           <CardContent className="space-y-4">
             {skill === 'listening' && currentItem.audioUrl ? (
-              <AudioPlayer audioUrl={currentItem.audioUrl} />
+              <audio controls preload="none" className="w-full" src={currentItem.audioUrl}>
+                Your browser does not support audio playback.
+              </audio>
             ) : null}
             {skill === 'listening' && !currentItem.audioUrl ? (
               <p className="text-xs text-muted-foreground">
