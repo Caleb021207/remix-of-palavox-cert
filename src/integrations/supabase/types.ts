@@ -291,6 +291,42 @@ export type Database = {
         }
         Relationships: []
       }
+      cut_scores: {
+        Row: {
+          active: boolean
+          cefr_band: string
+          created_at: string
+          id: string
+          max_scaled: number
+          min_scaled: number
+          skill: string
+          updated_at: string
+          wida_level: number
+        }
+        Insert: {
+          active?: boolean
+          cefr_band: string
+          created_at?: string
+          id?: string
+          max_scaled: number
+          min_scaled: number
+          skill: string
+          updated_at?: string
+          wida_level: number
+        }
+        Update: {
+          active?: boolean
+          cefr_band?: string
+          created_at?: string
+          id?: string
+          max_scaled?: number
+          min_scaled?: number
+          skill?: string
+          updated_at?: string
+          wida_level?: number
+        }
+        Relationships: []
+      }
       event_logs: {
         Row: {
           created_at: string
@@ -636,6 +672,53 @@ export type Database = {
           },
         ]
       }
+      item_responses: {
+        Row: {
+          created_at: string
+          form_id: string | null
+          id: string
+          is_correct: boolean
+          is_trial: boolean
+          item_id: string
+          response_time_ms: number | null
+          selected_option_id: string | null
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          form_id?: string | null
+          id?: string
+          is_correct?: boolean
+          is_trial?: boolean
+          item_id: string
+          response_time_ms?: number | null
+          selected_option_id?: string | null
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          form_id?: string | null
+          id?: string
+          is_correct?: boolean
+          is_trial?: boolean
+          item_id?: string
+          response_time_ms?: number | null
+          selected_option_id?: string | null
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_responses_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       item_stats: {
         Row: {
           dif_flag: boolean
@@ -858,6 +941,63 @@ export type Database = {
           title?: string | null
           topic?: string | null
           word_count?: number | null
+        }
+        Relationships: []
+      }
+      proficiency_results: {
+        Row: {
+          cefr_band: string | null
+          created_at: string
+          form_id: string | null
+          id: string
+          n_correct: number
+          n_scored: number
+          scaled_score: number
+          sem: number | null
+          session_id: string
+          skill: string
+          test_window: string | null
+          updated_at: string
+          user_id: string
+          wida_high: number | null
+          wida_level: number | null
+          wida_low: number | null
+        }
+        Insert: {
+          cefr_band?: string | null
+          created_at?: string
+          form_id?: string | null
+          id?: string
+          n_correct?: number
+          n_scored?: number
+          scaled_score: number
+          sem?: number | null
+          session_id: string
+          skill: string
+          test_window?: string | null
+          updated_at?: string
+          user_id: string
+          wida_high?: number | null
+          wida_level?: number | null
+          wida_low?: number | null
+        }
+        Update: {
+          cefr_band?: string | null
+          created_at?: string
+          form_id?: string | null
+          id?: string
+          n_correct?: number
+          n_scored?: number
+          scaled_score?: number
+          sem?: number | null
+          session_id?: string
+          skill?: string
+          test_window?: string | null
+          updated_at?: string
+          user_id?: string
+          wida_high?: number | null
+          wida_level?: number | null
+          wida_low?: number | null
         }
         Relationships: []
       }
@@ -1514,6 +1654,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bump_item_exposure: { Args: { _item_ids: string[] }; Returns: undefined }
+      bump_item_responses: { Args: { _item_ids: string[] }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
