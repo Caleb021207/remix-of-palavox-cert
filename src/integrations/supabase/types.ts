@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      blueprints: {
+        Row: {
+          created_at: string
+          grade_band: string
+          id: string
+          level_distribution: Json
+          n_items: number
+          name: string
+          skill: string
+        }
+        Insert: {
+          created_at?: string
+          grade_band?: string
+          id?: string
+          level_distribution?: Json
+          n_items?: number
+          name: string
+          skill: string
+        }
+        Update: {
+          created_at?: string
+          grade_band?: string
+          id?: string
+          level_distribution?: Json
+          n_items?: number
+          name?: string
+          skill?: string
+        }
+        Relationships: []
+      }
+      can_do_statements: {
+        Row: {
+          created_at: string
+          framework: string
+          id: string
+          level: string
+          skill_or_mode: string
+          statement: string
+        }
+        Insert: {
+          created_at?: string
+          framework: string
+          id?: string
+          level: string
+          skill_or_mode: string
+          statement: string
+        }
+        Update: {
+          created_at?: string
+          framework?: string
+          id?: string
+          level?: string
+          skill_or_mode?: string
+          statement?: string
+        }
+        Relationships: []
+      }
       certificate_verifications: {
         Row: {
           certificate_id: string
@@ -269,6 +326,74 @@ export type Database = {
           },
         ]
       }
+      form_items: {
+        Row: {
+          form_id: string
+          is_trial: boolean
+          item_id: string
+          position: number
+        }
+        Insert: {
+          form_id: string
+          is_trial?: boolean
+          item_id: string
+          position?: number
+        }
+        Update: {
+          form_id?: string
+          is_trial?: boolean
+          item_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_items_form_id_fkey"
+            columns: ["form_id"]
+            isOneToOne: false
+            referencedRelation: "forms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_items_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forms: {
+        Row: {
+          blueprint_id: string | null
+          created_at: string
+          id: string
+          name: string
+          status: string
+        }
+        Insert: {
+          blueprint_id?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          status?: string
+        }
+        Update: {
+          blueprint_id?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forms_blueprint_id_fkey"
+            columns: ["blueprint_id"]
+            isOneToOne: false
+            referencedRelation: "blueprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fraud_flags: {
         Row: {
           created_at: string
@@ -417,6 +542,209 @@ export type Database = {
         }
         Relationships: []
       }
+      item_can_do_map: {
+        Row: {
+          can_do_id: string
+          item_id: string
+        }
+        Insert: {
+          can_do_id: string
+          item_id: string
+        }
+        Update: {
+          can_do_id?: string
+          item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_can_do_map_can_do_id_fkey"
+            columns: ["can_do_id"]
+            isOneToOne: false
+            referencedRelation: "can_do_statements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_can_do_map_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_embeddings: {
+        Row: {
+          created_at: string
+          embedding: Json
+          item_id: string
+          skill: string
+        }
+        Insert: {
+          created_at?: string
+          embedding: Json
+          item_id: string
+          skill: string
+        }
+        Update: {
+          created_at?: string
+          embedding?: Json
+          item_id?: string
+          skill?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_embeddings_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: true
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_options: {
+        Row: {
+          id: string
+          is_correct: boolean
+          item_id: string
+          label: string
+          position: number
+          rationale: string | null
+        }
+        Insert: {
+          id?: string
+          is_correct?: boolean
+          item_id: string
+          label: string
+          position?: number
+          rationale?: string | null
+        }
+        Update: {
+          id?: string
+          is_correct?: boolean
+          item_id?: string
+          label?: string
+          position?: number
+          rationale?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_options_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      item_stats: {
+        Row: {
+          dif_flag: boolean
+          irt_a: number | null
+          irt_b: number | null
+          item_id: string
+          n_responses: number
+          p_value: number | null
+          point_biserial: number | null
+          se: number | null
+          updated_at: string
+        }
+        Insert: {
+          dif_flag?: boolean
+          irt_a?: number | null
+          irt_b?: number | null
+          item_id: string
+          n_responses?: number
+          p_value?: number | null
+          point_biserial?: number | null
+          se?: number | null
+          updated_at?: string
+        }
+        Update: {
+          dif_flag?: boolean
+          irt_a?: number | null
+          irt_b?: number | null
+          item_id?: string
+          n_responses?: number
+          p_value?: number | null
+          point_biserial?: number | null
+          se?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_stats_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: true
+            referencedRelation: "items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      items: {
+        Row: {
+          cefr_level: string | null
+          created_at: string
+          dok: number | null
+          exposure_count: number
+          format: string
+          gate_results: Json
+          id: string
+          language: string
+          passage_id: string | null
+          prompt_version: string | null
+          skill: string
+          source_model: string | null
+          status: string
+          stem: string
+          target_wida_level: number
+          topic: string | null
+        }
+        Insert: {
+          cefr_level?: string | null
+          created_at?: string
+          dok?: number | null
+          exposure_count?: number
+          format: string
+          gate_results?: Json
+          id?: string
+          language?: string
+          passage_id?: string | null
+          prompt_version?: string | null
+          skill: string
+          source_model?: string | null
+          status?: string
+          stem: string
+          target_wida_level: number
+          topic?: string | null
+        }
+        Update: {
+          cefr_level?: string | null
+          created_at?: string
+          dok?: number | null
+          exposure_count?: number
+          format?: string
+          gate_results?: Json
+          id?: string
+          language?: string
+          passage_id?: string | null
+          prompt_version?: string | null
+          skill?: string
+          source_model?: string | null
+          status?: string
+          stem?: string
+          target_wida_level?: number
+          topic?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "items_passage_id_fkey"
+            columns: ["passage_id"]
+            isOneToOne: false
+            referencedRelation: "passages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_members: {
         Row: {
           created_at: string
@@ -473,6 +801,63 @@ export type Database = {
           name?: string
           slug?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      passages: {
+        Row: {
+          audio_asset_id: string | null
+          audio_status: string
+          body: string
+          cefr_level: string | null
+          created_at: string
+          id: string
+          key_language_use: string | null
+          language: string
+          readability_grade: number | null
+          skill: string
+          source_model: string | null
+          status: string
+          target_wida_level: number
+          title: string | null
+          topic: string | null
+          word_count: number | null
+        }
+        Insert: {
+          audio_asset_id?: string | null
+          audio_status?: string
+          body: string
+          cefr_level?: string | null
+          created_at?: string
+          id?: string
+          key_language_use?: string | null
+          language?: string
+          readability_grade?: number | null
+          skill: string
+          source_model?: string | null
+          status?: string
+          target_wida_level: number
+          title?: string | null
+          topic?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          audio_asset_id?: string | null
+          audio_status?: string
+          body?: string
+          cefr_level?: string | null
+          created_at?: string
+          id?: string
+          key_language_use?: string | null
+          language?: string
+          readability_grade?: number | null
+          skill?: string
+          source_model?: string | null
+          status?: string
+          target_wida_level?: number
+          title?: string | null
+          topic?: string | null
+          word_count?: number | null
         }
         Relationships: []
       }

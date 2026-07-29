@@ -8,6 +8,7 @@ import Test from "./pages/Test";
 import Results from "./pages/Results";
 import Admin from "./pages/Admin";
 import GenerateAll from "./pages/GenerateAll";
+import Author from "./pages/Author";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -45,6 +46,15 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/author"
+            element={
+              <ProtectedRoute requireRole="admin">
+                <Author />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/school-service-agreement" element={<SchoolServiceAgreement />} />
