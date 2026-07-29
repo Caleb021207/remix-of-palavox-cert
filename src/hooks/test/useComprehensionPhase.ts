@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { TestPhase } from '@/types';
 import { LanguageCode, languages } from '@/config/languages';
 import { EnglishTestVariant } from '@/config/languages/englishVariants';
-import { generateComprehensionContent, evaluatePhaseResponses } from '@/services/test/multiPhaseTestService';
+import { generateComprehensionContent } from '@/services/test/multiPhaseTestService';
+import { submitPhase } from '@/services/test/secureTestService';
 import { toast } from 'sonner';
 import { useUILanguage } from '@/contexts/UILanguageContext';
 import { useAudioPlayer } from './useAudioPlayer';
@@ -28,7 +29,6 @@ export const useComprehensionPhase = ({
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [readingResponses, setReadingResponses] = useState<Record<string, string>>({});
   const [listeningResponses, setListeningResponses] = useState<Record<string, string>>({});
-  const [readingScore, setReadingScore] = useState(0);
   const [loading, setLoading] = useState(true);
   
   // Use enhanced audio player
@@ -188,77 +188,44 @@ export const useComprehensionPhase = ({
   };
 
   const completeReadingPhase = async () => {
+    // No scoring happens here: the reading answers are simply handed to the
+    // server, which grades them against the answer key it stored for this
+    // session. The browser never sees a correct answer.
     try {
       setLoading(true);
-      const contentLanguageCode: LanguageCode = languageCode || 'english-for-spanish';
-      
-      const result = await evaluatePhaseResponses(
-        TestPhase.Reading,
-        readingResponses,
-        readingContent,
-        contentLanguageCode
-      );
-      
-      setReadingScore(result.score);
-      
-      // Move to listening phase
+      await submitPhase({
+        sessionId,
+        phase: 'reading',
+        responses: readingResponses,
+      });
+
       setCurrentPhase('listening');
       setCurrentContentIndex(0);
       setCurrentQuestionIndex(0);
       setLoading(false);
     } catch (error) {
-      console.error('Error evaluating reading phase:', error);
-      toast.error('Failed to evaluate reading responses');
+      console.error('Error submitting reading phase:', error);
+      toast.error('Failed to submit your reading answers');
       setLoading(false);
     }
   };
 
   const completeComprehensionPhase = async () => {
+    // Raw answers only. The score returned below is the server's, and it is
+    // the same value that was written to the database — nothing is computed,
+    // averaged or cached locally.
     try {
       setLoading(true);
-      const contentLanguageCode: LanguageCode = languageCode || 'english-for-spanish';
-      
-      const listeningResult = await evaluatePhaseResponses(
-        TestPhase.Listening,
-        listeningResponses,
-        listeningContent,
-        contentLanguageCode
-      );
-      
-      // Calculate combined score (average of reading and listening)
-      const combinedScore = (readingScore + listeningResult.score) / 2;
-      
-      // Store validation data
-      const totalQuestions = 
-        readingContent.reduce((sum, c) => sum + c.questions.length, 0) +
-        listeningContent.reduce((sum, c) => sum + c.questions.length, 0);
-      
-      const validationData = {
-        totalQuestions,
-        answeredQuestions: Object.keys(readingResponses).length + Object.keys(listeningResponses).length,
-        readingScore,
-        listeningScore: listeningResult.score,
-        combinedScore,
-        timestamp: new Date().toISOString(),
-        scoringMethod: 'comprehension',
-        phaseBreakdown: {
-          reading: {
-            score: readingScore,
-            questions: readingContent.reduce((sum, c) => sum + c.questions.length, 0)
-          },
-          listening: {
-            score: listeningResult.score,
-            questions: listeningContent.reduce((sum, c) => sum + c.questions.length, 0)
-          }
-        }
-      };
-      
-      localStorage.setItem('scoringValidation', JSON.stringify(validationData));
-      
-      onComplete(combinedScore);
+      const result = await submitPhase({
+        sessionId,
+        phase: 'listening',
+        responses: listeningResponses,
+      });
+
+      onComplete(result.score);
     } catch (error) {
       console.error('Error completing comprehension phase:', error);
-      toast.error('Failed to evaluate comprehension responses');
+      toast.error('Failed to submit your comprehension answers');
     } finally {
       setLoading(false);
     }
