@@ -10,24 +10,15 @@ import NativeLanguageSelector from '@/components/test/NativeLanguageSelector';
 import PhaseSelectionMenu from '@/components/test/PhaseSelectionMenu';
 import PaymentModal from '@/components/PaymentModal';
 import SubscriptionStatus from '@/components/SubscriptionStatus';
-import { TestType, TestSession, TestPhase, SCORE_TO_LEVELS } from '@/types';
+import { TestType, TestSession, TestPhase } from '@/types';
 import { LanguageCode } from '@/config/languages';
 import { EnglishTestVariant } from '@/config/languages/englishVariants';
-import { updateTestSession } from '@/services/test/multiPhaseTestService';
+import { startSession } from '@/services/test/secureTestService';
 import { usePaymentVerification } from '@/hooks/usePaymentVerification';
 import { useProgressWarning } from '@/hooks/useProgressWarning';
 import { useAuth } from '@/hooks/useAuth';
 import { useUILanguage } from '@/contexts/UILanguageContext';
 import { translations } from '@/translations';
-
-// Generate a proper UUID v4
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
 
 const Test = () => {
   const navigate = useNavigate();
@@ -158,48 +149,54 @@ const Test = () => {
   };
 
   const handlePhaseSelection = (phase: TestPhase | 'full') => {
-    if (phase === 'full') {
-      // Start full certification test
-      setSinglePhase(null);
-      startTestSession(isSubscriber, selectedLanguage);
-    } else {
-      // Start single phase test
-      setSinglePhase(phase);
-      startTestSession(isSubscriber, selectedLanguage);
-    }
+    const selected = phase === 'full' ? null : phase;
+    setSinglePhase(selected);
     setShowPhaseSelection(false);
+    void startTestSession(isSubscriber, selectedLanguage ?? undefined, undefined, selected);
   };
 
-  const startTestSession = (subscriptionVerified: boolean, languageCode?: LanguageCode, englishVariant?: EnglishTestVariant) => {
-    // All tests are English proficiency tests now
+  /**
+   * Sessions are created by the `start-session` edge function. The browser
+   * cannot insert into test_sessions, so the server-issued id is the only
+   * valid session identifier for the rest of the exam.
+   */
+  const startTestSession = async (subscriptionVerified: boolean, languageCode?: LanguageCode, englishVariant?: EnglishTestVariant, phase?: TestPhase | null) => {
     const sessionLanguage = languageCode || selectedLanguage;
-    
+
     if (!sessionLanguage) {
       console.error('No language selected for test session');
       return;
     }
-    
-    // Create new certification test session with proper UUID and selected language
-    const newSession: TestSession = {
-      id: generateUUID(),
-      testType: TestType.Certification,
-      answers: {},
-      startTime: new Date(),
-      subscriptionVerified,
-      paymentStatus: subscriptionVerified ? 'subscription' : 'paid',
-      language: sessionLanguage as LanguageCode,
-      englishVariant: englishVariant // Store the English variant if applicable
-    };
-    
-    console.log('Starting test session:', {
-      language: sessionLanguage,
-      englishVariant: englishVariant?.code,
-      uiLanguage: englishVariant?.uiLanguage
-    });
-    
-    setSession(newSession);
-    setTestStarted(true);
-    setShowPaymentModal(false);
+
+    setCheckingAccess(true);
+    try {
+      const { sessionId } = await startSession({
+        testType: 'certification',
+        language: sessionLanguage,
+        singlePhase: phase ?? null,
+      });
+
+      const newSession: TestSession = {
+        id: sessionId,
+        testType: TestType.Certification,
+        answers: {},
+        startTime: new Date(),
+        subscriptionVerified,
+        paymentStatus: subscriptionVerified ? 'subscription' : 'paid',
+        language: sessionLanguage as LanguageCode,
+        englishVariant: englishVariant
+      };
+
+      setSession(newSession);
+      setTestStarted(true);
+      setShowPaymentModal(false);
+    } catch (error) {
+      console.error('Error starting test session:', error);
+      toast.error(error instanceof Error ? error.message : 'Could not start your test. Please try again.');
+      setShowPhaseSelection(true);
+    } finally {
+      setCheckingAccess(false);
+    }
   };
 
   const handlePaymentSuccess = () => {
@@ -215,44 +212,12 @@ const Test = () => {
     setIsSubscriber(isPremium);
   };
 
+  /**
+   * The server has already scored and finalized the session by this point.
+   * We simply hand the results page the session id to read from.
+   */
   const handleTestComplete = async (completedSession: TestSession) => {
-    try {
-      // Calculate overall score and levels
-      const overallScore = completedSession.score || 0;
-      
-      // Find the appropriate ACTFL and CEFR levels
-      let actfl = 'Novice Low';
-      let cefr = 'Pre-A1';
-      
-      for (const [scoreThreshold, levels] of Object.entries(SCORE_TO_LEVELS)) {
-        if (overallScore >= parseInt(scoreThreshold)) {
-          actfl = levels.actfl;
-          cefr = levels.cefr;
-          break;
-        }
-      }
-
-      // Update session with final results
-      const finalSession: TestSession = {
-        ...completedSession,
-        actfl: actfl as any,
-        cefr: cefr as any,
-        endTime: new Date()
-      };
-
-      // Save to database
-      await updateTestSession(finalSession.id, finalSession);
-      
-      // Store in localStorage for results page
-      localStorage.setItem('testSession', JSON.stringify(finalSession));
-      
-      // Navigate to results
-      navigate('/results');
-      
-    } catch (error) {
-      console.error('Error completing test:', error);
-      toast.error('Error saving test results. Please try again.');
-    }
+    navigate(`/results?session=${completedSession.id}`);
   };
 
   return (
@@ -304,19 +269,8 @@ const Test = () => {
                 session={session}
                 phase={singlePhase}
                 onComplete={(completedSession, score) => {
-                  // Store phase information for Results page
-                  const phaseSession = {
-                    ...completedSession,
-                    singlePhase: singlePhase // Mark as single phase test
-                  };
-                  
-                  // Store in localStorage for results page
-                  localStorage.setItem('testSession', JSON.stringify(phaseSession));
-                  
                   toast.success(`${singlePhase} phase completed with score: ${score}%`);
-                  
-                  // Navigate to results page
-                  navigate('/results');
+                  navigate(`/results?session=${completedSession.id}&phase=${singlePhase}`);
                 }}
                 onBackToMenu={() => {
                   setShowPhaseSelection(true);

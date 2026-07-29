@@ -6,15 +6,13 @@ import { Progress } from '@/components/ui/progress';
 import { TestPhase, TestSession } from '@/types';
 import { languages, LanguageCode } from '@/config/languages';
 import { EnglishTestVariant } from '@/config/languages/englishVariants';
-import { saveTestSession } from '@/services/test/sessionService';
 import { toast } from 'sonner';
 import { useUILanguage } from '@/contexts/UILanguageContext';
 import ComprehensionPhase from './phases/ComprehensionPhase';
 import WritingPhase from './phases/WritingPhase';
 import ConversationalFluencyPhase from './phases/ConversationalFluencyPhase';
-import { supabase } from '@/integrations/supabase/client';
-import { checkCertificateEligibility, CERTIFICATE_TIERS } from '@/config/testConfig';
-import { determineSTAMPLevel } from '@/utils/stampScoring';
+import { determineProficiencyLevel } from '@/utils/proficiencyScoring';
+import { finalizeTest } from '@/services/test/secureTestService';
 
 interface MultiPhaseTestProps {
   session: TestSession;
@@ -88,13 +86,6 @@ const MultiPhaseTest: React.FC<MultiPhaseTestProps> = ({ session, onComplete }) 
   const currentPhaseIndex = phases.indexOf(currentPhase);
   const progress = ((currentPhaseIndex + 1) / phases.length) * 100;
 
-  // Phase weights for final score calculation (25/30/45)
-  const PHASE_WEIGHTS = {
-    [TestPhase.Comprehension]: 0.25,  // Reading + Listening
-    [TestPhase.Writing]: 0.30,         // Written production
-    [TestPhase.Conversation]: 0.45     // Conversational fluency
-  } as const;
-
   const handlePhaseComplete = async (score: number) => {
     const updatedPhaseScores = { ...phaseScores, [currentPhase]: score };
     setPhaseScores(updatedPhaseScores);
@@ -113,67 +104,45 @@ const MultiPhaseTest: React.FC<MultiPhaseTestProps> = ({ session, onComplete }) 
     }
   };
 
+  /**
+   * Finalization is entirely server-side: `finalize-test` aggregates the
+   * section scores it wrote itself, applies the official weights and stores
+   * the overall result. No weighting, tier logic or score math happens here.
+   */
   const handleTestComplete = async (
     finalScores: Partial<Record<TestPhase, number>>
   ) => {
     setLoading(true);
     
     try {
-      // Calculate weighted average score
-      const weightedScore = 
-        (finalScores[TestPhase.Comprehension] || 0) * PHASE_WEIGHTS[TestPhase.Comprehension] +
-        (finalScores[TestPhase.Writing] || 0) * PHASE_WEIGHTS[TestPhase.Writing] +
-        (finalScores[TestPhase.Conversation] || 0) * PHASE_WEIGHTS[TestPhase.Conversation];
-      
-      // Check certificate eligibility
-      const eligibility = checkCertificateEligibility({
-        comprehension: finalScores[TestPhase.Comprehension],
-        writing: finalScores[TestPhase.Writing],
-        conversation: finalScores[TestPhase.Conversation]
-      });
-      
+      const result = await finalizeTest(session.id);
+
       const completedSession: TestSession = {
         ...session,
         phaseScores: finalScores,
-        score: Math.round(weightedScore),
+        score: Math.round(result.overall_score ?? 0),
         endTime: new Date(),
         feedback: {
           ...session.feedback,
-          phaseWeights: PHASE_WEIGHTS,
-          scoringMethod: 'weighted-25-30-45',
-          certificateTier: eligibility.tier,
-          certificateQualified: eligibility.qualified,
-          needsImprovement: eligibility.needsImprovement,
-          calculation: {
-            comprehension: `${finalScores[TestPhase.Comprehension]}% × 0.25 = ${((finalScores[TestPhase.Comprehension] || 0) * 0.25).toFixed(1)}`,
-            writing: `${finalScores[TestPhase.Writing]}% × 0.30 = ${((finalScores[TestPhase.Writing] || 0) * 0.30).toFixed(1)}`,
-            conversation: `${finalScores[TestPhase.Conversation]}% × 0.45 = ${((finalScores[TestPhase.Conversation] || 0) * 0.45).toFixed(1)}`,
-            total: `${weightedScore.toFixed(1)}%`
-          }
+          overallCefr: result.overall_cefr,
+          functionalLabel: result.functional_label,
+          confidenceBand: result.confidence_band,
+          strengths: result.strengths,
+          nextSteps: result.next_steps,
+          scoringMethod: 'server-side',
         }
       };
-      
-      await saveTestSession(completedSession);
-      
-      // Update database with certificate tier
-      await supabase
-        .from('test_sessions')
-        .update({
-          certificate_tier: eligibility.tier
-        } as any)
-        .eq('id', session.id);
-      
-      localStorage.setItem('testSession', JSON.stringify(completedSession));
-      
+
       toast.success(getTranslation('test.multiPhase.testCompleted', 'Test completed! View your results.'));
       onComplete(completedSession);
     } catch (error) {
-      console.error('Error saving test session:', error);
-      toast.error(getTranslation('test.multiPhase.saveError', 'Test completed but failed to save. Please try again.'));
+      console.error('Error finalizing test session:', error);
+      toast.error(error instanceof Error ? error.message : getTranslation('test.multiPhase.saveError', 'Could not finalize your test. Please try again.'));
     } finally {
       setLoading(false);
     }
   };
+
 
   const renderCurrentPhase = () => {
     const phaseProps = {
@@ -247,7 +216,7 @@ const MultiPhaseTest: React.FC<MultiPhaseTestProps> = ({ session, onComplete }) 
                       {score.toFixed(1)}%
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {determineSTAMPLevel(score).name}
+                      {determineProficiencyLevel(score).name}
                     </div>
                   </div>
                 ) : null;

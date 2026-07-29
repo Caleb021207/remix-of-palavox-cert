@@ -1,9 +1,9 @@
 
 import { EvaluationResult } from '@/types';
 import { TARGET_LANGUAGE, BASE_LANGUAGE } from '@/config/languageConfig';
-import { STAMP_LEVELS } from '@/utils/stampScoring';
+import { PROFICIENCY_LEVELS } from '@/utils/proficiencyScoring';
 
-// Evaluate writing or speaking response using STAMP criteria
+// Evaluate writing or speaking response using Proficiency Level criteria
 export async function evaluateResponse(
   responseType: 'writing' | 'speaking',
   content: string,
@@ -11,8 +11,8 @@ export async function evaluateResponse(
   level?: string
 ): Promise<EvaluationResult> {
   try {
-    // Generate STAMP-informed prompt
-    const stampCriteria = generateSTAMPEvaluationPrompt(responseType);
+    // Generate Proficiency Level-informed prompt
+    const proficiencyCriteria = generateProficiencyEvaluationPrompt(responseType);
     
     const response = await fetch(`${window.location.origin}/functions/v1/evaluate-response`, {
       method: 'POST',
@@ -26,7 +26,7 @@ export async function evaluateResponse(
         level,
         targetLanguage: TARGET_LANGUAGE,
         baseLanguage: BASE_LANGUAGE,
-        stampCriteria // Include STAMP criteria in the evaluation
+        proficiencyCriteria // Include Proficiency Level criteria in the evaluation
       }),
     });
 
@@ -43,12 +43,12 @@ export async function evaluateResponse(
   }
 }
 
-function generateSTAMPEvaluationPrompt(responseType: 'writing' | 'speaking'): string {
+function generateProficiencyEvaluationPrompt(responseType: 'writing' | 'speaking'): string {
   return `
-Please evaluate this response using STAMP (Standards-based Measurement of Proficiency) criteria:
+Please evaluate this response using proficiency-level criteria:
 
-STAMP Levels (1-8):
-${STAMP_LEVELS.map(level => 
+Proficiencys (1-8):
+${PROFICIENCY_LEVELS.map(level => 
   `Level ${level.level} - ${level.name}:
   - Text Type: ${level.textType}
   - Language Control: ${level.languageControl}
@@ -68,6 +68,6 @@ ${responseType === 'speaking' ?
   'For writing assessment, also consider spelling, punctuation, and text organization.'
 }
 
-Assign a STAMP level (1-8) and corresponding percentage score based on these detailed criteria.
+Assign a Proficiency Level level (1-8) and corresponding percentage score based on these detailed criteria.
 `;
 }

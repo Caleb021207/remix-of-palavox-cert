@@ -5,7 +5,7 @@ import { TestSession, EvaluationResult, CEFRLevel, ACTFLLevel } from '@/types';
 import { saveTestSession } from '@/services/test';
 import { EnhancedScoring, ScoringDebugger } from '@/utils/enhancedScoring';
 import { determineCEFRLevel, determineACTFLLevel } from '@/utils/scoring';
-import { determineSTAMPLevel, generateSTAMPFeedback } from '@/utils/stampScoring';
+import { determineProficiencyLevel, generateProficiencyFeedback } from '@/utils/proficiencyScoring';
 
 export const useTestEvaluation = (session: TestSession | null, setLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
     if (!session) return;
     
     setLoading(true);
-    console.log('📝 Submitting test for STAMP-based evaluation:', session.id);
+    console.log('📝 Submitting test for Proficiency Level-based evaluation:', session.id);
     
     try {
       // Clear previous logs and calculate score using enhanced scoring
@@ -49,21 +49,21 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
       
       const score = scoringResult.score;
       
-      // Use STAMP-based level determination
-      const stampLevel = determineSTAMPLevel(score);
-      const cefr = stampLevel.cefrLevel;
-      const actfl = stampLevel.actflLevel;
+      // Use Proficiency Level-based level determination
+      const proficiencyLevel = determineProficiencyLevel(score);
+      const cefr = proficiencyLevel.cefrLevel;
+      const actfl = proficiencyLevel.actflLevel;
       
-      console.log('🎯 STAMP-based level determination:', { 
+      console.log('🎯 Proficiency Level-based level determination:', { 
         score, 
-        stampLevel: stampLevel.level, 
-        stampName: stampLevel.name,
+        proficiencyLevel: proficiencyLevel.level, 
+        stampName: proficiencyLevel.name,
         cefr, 
         actfl 
       });
 
-      // Generate STAMP-based comprehensive feedback
-      const stampFeedback = generateSTAMPFeedback(score, stampLevel, session.testType);
+      // Generate Proficiency Level-based comprehensive feedback
+      const proficiencyFeedback = generateProficiencyFeedback(score, proficiencyLevel, session.testType);
       
       const finalSession = {
         ...session,
@@ -72,14 +72,14 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
         cefr,
         actfl,
         feedback: {
-          ...stampFeedback,
+          ...proficiencyFeedback,
           scoring_breakdown: {
             correct_answers: scoringResult.correctCount,
             total_questions: scoringResult.totalCount,
             percentage: score.toFixed(1),
             method_breakdown: scoringResult.breakdown,
-            stamp_level: stampLevel.level,
-            stamp_name: stampLevel.name,
+            stamp_level: proficiencyLevel.level,
+            stamp_name: proficiencyLevel.name,
             cefr_level: cefr,
             actfl_level: actfl,
             scoring_timestamp: new Date().toISOString()
@@ -87,11 +87,11 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
         }
       };
       
-      console.log('✅ Final STAMP-based session prepared:', {
+      console.log('✅ Final Proficiency Level-based session prepared:', {
         sessionId: finalSession.id,
         score: finalSession.score,
-        stampLevel: stampLevel.level,
-        stampName: stampLevel.name,
+        proficiencyLevel: proficiencyLevel.level,
+        stampName: proficiencyLevel.name,
         cefr: finalSession.cefr,
         actfl: finalSession.actfl
       });
@@ -119,7 +119,7 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
       const debugReport = ScoringDebugger.generateReport(finalSession.id);
       localStorage.setItem('scoringDebugReport', debugReport);
       
-      // Store STAMP validation data
+      // Store Proficiency Level validation data
       const validationData = {
         sessionId: finalSession.id,
         timestamp: new Date().toISOString(),
@@ -127,7 +127,7 @@ export const useTestEvaluation = (session: TestSession | null, setLoading: React
         cefr: finalSession.cefr,
         actfl: finalSession.actfl,
         questionCount: finalSession.questions?.length || 0,
-        scoringMethod: 'stamp-enhanced'
+        scoringMethod: 'proficiency-enhanced'
       };
       localStorage.setItem('scoringValidation', JSON.stringify(validationData));
       

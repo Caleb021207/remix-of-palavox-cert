@@ -1,11 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { LanguageCode, languages } from '@/config/languages';
 import { EnglishTestVariant } from '@/config/languages/englishVariants';
 import { generateComprehensionContent } from '@/services/test/multiPhaseTestService';
 import { toast } from 'sonner';
 import { useUILanguage } from '@/contexts/UILanguageContext';
 import { useAudioPlayer } from './useAudioPlayer';
+import { gradeAnswer, submitPhase } from '@/services/test/secureTestService';
 
 type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -89,6 +89,10 @@ export const useAdaptiveComprehension = ({
   const preGeneratedCacheRef = useRef<Map<string, any[]>>(new Map());
   const preGeneratingRef = useRef<Set<string>>(new Set());
   
+  // Raw answers collected across both sub-phases, submitted to the server for
+  // authoritative grading when the phase completes.
+  const responsesRef = useRef<Record<string, string>>({});
+
   // Refs for stable callback access
   const currentPhaseRef = useRef(currentPhase);
   const stateRef = useRef({ readingState, listeningState });
@@ -309,43 +313,38 @@ export const useAdaptiveComprehension = ({
     }
   }, [sessionId, languageCode, stopAudio, preGenerateForLevels]);
 
-  const logQuestionAttempt = useCallback(async (attempt: QuestionAttempt) => {
-    try {
-      const correctAnswer = currentQuestion.options.find((o: any) => o.isCorrect)?.text;
-      
-      await supabase.from('event_logs').insert({
-        session_id: sessionId,
-        event_type: 'adaptive_question_attempt',
-        payload: {
-          question_id: attempt.questionId,
-          section: currentPhase,
-          level: attempt.level,
-          user_answer: currentQuestion.options.find((o: any) => o.id === userAnswer)?.text,
-          correct_answer: correctAnswer,
-          is_correct: attempt.isCorrect,
-          response_time_ms: attempt.responseTimeMs,
-          confidence_at_question: attempt.confidence
-        }
-      });
-    } catch (error) {
-      console.warn('Failed to log question attempt:', error);
-    }
-  }, [sessionId, currentPhase, currentQuestion, userAnswer]);
-
   const evaluateAndProgress = useCallback(async () => {
     if (!currentQuestion || !userAnswer) return;
-    
+
     const state = getState();
-    const correctOption = currentQuestion.options.find((o: any) => o.isCorrect);
-    const isCorrect = correctOption?.id === userAnswer;
     const responseTime = Date.now() - questionStartTime;
-    
+
+    // Record the raw answer. It is submitted to the server at the end of the
+    // phase and re-graded there; nothing here is trusted as a score.
+    responsesRef.current[currentQuestion.id] = userAnswer;
+
+    // The browser no longer receives `isCorrect`. Ask the server which way to
+    // branch — it also writes the attempt to the audit log.
+    let isCorrect = false;
+    try {
+      const graded = await gradeAnswer({
+        sessionId,
+        questionId: currentQuestion.id,
+        selectedOptionId: userAnswer,
+        section: currentPhaseRef.current,
+        responseTimeMs: responseTime
+      });
+      isCorrect = graded.isCorrect;
+    } catch (error) {
+      console.warn('Could not grade answer server-side, staying at current level:', error);
+    }
+
     const nextLevel = determineNextLevel(state.currentLevel, isCorrect);
     const newLevelHistory = [...state.levelHistory, nextLevel];
     const newCorrectCount = state.correctCount + (isCorrect ? 1 : 0);
     const newTotalCount = state.totalCount + 1;
     const newConfidence = calculateConfidence(newLevelHistory, newTotalCount);
-    
+
     const attempt: QuestionAttempt = {
       questionId: currentQuestion.id,
       level: state.currentLevel,
@@ -353,10 +352,9 @@ export const useAdaptiveComprehension = ({
       responseTimeMs: responseTime,
       confidence: newConfidence
     };
-    
+
     setAttempts(prev => [...prev, attempt]);
-    await logQuestionAttempt(attempt);
-    
+
     const shouldComplete = 
       (newConfidence >= CONFIDENCE_THRESHOLD && newTotalCount >= MIN_QUESTIONS) ||
       newTotalCount >= MAX_QUESTIONS;
@@ -376,7 +374,8 @@ export const useAdaptiveComprehension = ({
     } else {
       await loadNextQuestion();
     }
-  }, [currentQuestion, userAnswer, questionStartTime, getState, setState, determineNextLevel, calculateConfidence, logQuestionAttempt, loadNextQuestion]);
+  }, [currentQuestion, userAnswer, questionStartTime, sessionId, getState, setState, determineNextLevel, calculateConfidence, loadNextQuestion]);
+
 
   const completePhase = useCallback(async (
     levelHistory: CEFRLevel[],
@@ -407,45 +406,30 @@ export const useAdaptiveComprehension = ({
   ) => {
     try {
       setLoading(true);
-      
-      const readingFinalLevel = getFinalLevel(reading.levelHistory);
-      const listeningFinalLevel = getFinalLevel(listening.levelHistory);
-      const readingCorrectRate = reading.correctCount / reading.totalCount;
-      const listeningCorrectRate = listening.correctCount / listening.totalCount;
-      
-      const readingScore = calculateAdaptiveScore(readingFinalLevel, readingCorrectRate, reading.totalCount);
-      const listeningScore = calculateAdaptiveScore(listeningFinalLevel, listeningCorrectRate, listening.totalCount);
-      const combinedScore = (readingScore + listeningScore) / 2;
-      
-      await supabase.from('test_sessions').update({
-        metadata: {
-          is_adaptive: true,
-          adaptive_reading_level: readingFinalLevel,
-          adaptive_listening_level: listeningFinalLevel,
-          adaptive_question_count: reading.totalCount + listening.totalCount
-        }
-      }).eq('id', sessionId);
-      
-      onComplete(combinedScore);
+
+      // Submit raw answers only. The edge function grades them against the
+      // server-held answer key and writes the score itself.
+      const result = await submitPhase({
+        sessionId,
+        phase: 'comprehension',
+        responses: responsesRef.current,
+      });
+
+      console.log('✅ Comprehension graded server-side:', {
+        score: result.score,
+        cefr: result.cefr_level,
+        questions: reading.totalCount + listening.totalCount
+      });
+
+      onComplete(result.score);
     } catch (error) {
       console.error('Error completing adaptive test:', error);
-      toast.error('Failed to complete test');
+      toast.error(error instanceof Error ? error.message : 'Failed to complete test');
     } finally {
       setLoading(false);
     }
-  }, [sessionId, getFinalLevel, onComplete, t]);
+  }, [sessionId, onComplete]);
 
-  const calculateAdaptiveScore = (level: CEFRLevel, correctRate: number, questionCount: number): number => {
-    const baseScores: Record<CEFRLevel, number> = {
-      A1: 20, A2: 40, B1: 55, B2: 70, C1: 85, C2: 95
-    };
-    
-    const baseScore = baseScores[level];
-    const performanceAdjustment = (correctRate - 0.5) * 30;
-    const shortTestPenalty = questionCount < MIN_QUESTIONS ? (MIN_QUESTIONS - questionCount) * 2 : 0;
-    
-    return Math.max(0, Math.min(100, baseScore + performanceAdjustment - shortTestPenalty));
-  };
 
   const handlePlayAudio = async () => {
     if (currentContent) {

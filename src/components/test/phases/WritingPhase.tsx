@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { generateWritingPrompts, evaluatePhaseResponses } from '@/services/test/multiPhaseTestService';
+import { generateWritingPrompts } from '@/services/test/multiPhaseTestService';
+import { submitPhase } from '@/services/test/secureTestService';
 import { TestPhase } from '@/types';
 import { LanguageCode } from '@/config/languages';
 import { EnglishTestVariant } from '@/config/languages/englishVariants';
@@ -95,13 +96,17 @@ const WritingPhase: React.FC<WritingPhaseProps> = ({
     try {
       setLoading(true);
       
-      const contentLanguageCode: LanguageCode = languageCode || 'english-for-spanish';
-      
-      const result = await evaluatePhaseResponses(TestPhase.Writing, responses, undefined, contentLanguageCode);
+      // Raw text only — scoring and the database write happen server-side.
+      const result = await submitPhase({
+        sessionId,
+        phase: 'writing',
+        responses,
+        targetLanguage: 'English',
+      });
       onComplete(result.score);
     } catch (error) {
       console.error('Error evaluating writing phase:', error);
-      toast.error('Failed to evaluate writing responses');
+      toast.error(error instanceof Error ? error.message : 'Failed to evaluate writing responses');
     } finally {
       setLoading(false);
     }

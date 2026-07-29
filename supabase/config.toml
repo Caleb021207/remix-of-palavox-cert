@@ -1,1 +1,116 @@
 project_id = "jjxabqxlasnhmmaauoye"
+
+# ── Public endpoints ────────────────────────────────────────────────
+# Certificate verification must work for an unauthenticated employer /
+# school checking a certificate at /verify?id=...
+[functions.verify-certificate]
+verify_jwt = false
+
+[functions.verify-certification-code]
+verify_jwt = false
+
+# Stripe redirects back without a user JWT.
+[functions.verify-payment]
+verify_jwt = false
+
+# ── Authenticated exam + scoring pipeline ───────────────────────────
+[functions.start-session]
+verify_jwt = true
+
+[functions.submit-phase]
+verify_jwt = true
+
+[functions.grade-answer]
+verify_jwt = true
+
+[functions.finalize-test]
+verify_jwt = true
+
+[functions.issue-certificate]
+verify_jwt = true
+
+[functions.evaluate-test-responses]
+verify_jwt = true
+
+[functions.evaluate-conversation]
+verify_jwt = true
+
+[functions.evaluate-response]
+verify_jwt = true
+
+[functions.validate-writing]
+verify_jwt = true
+
+[functions.score-writing]
+verify_jwt = true
+
+[functions.score-speaking]
+verify_jwt = true
+
+# ── Paid AI / token-minting functions ───────────────────────────────
+[functions.get-realtime-token]
+verify_jwt = true
+
+[functions.realtime-conversation]
+verify_jwt = true
+
+[functions.voice-agent]
+verify_jwt = true
+
+[functions.chat-completion]
+verify_jwt = true
+
+[functions.aws-polly]
+verify_jwt = true
+
+[functions.azure-speech]
+verify_jwt = true
+
+# ── Content generation (billable) ───────────────────────────────────
+[functions.generate-comprehension-content]
+verify_jwt = true
+
+[functions.generate-writing-prompts]
+verify_jwt = true
+
+[functions.generate-speaking-prompts]
+verify_jwt = true
+
+[functions.generate-questions]
+verify_jwt = true
+
+[functions.generate-batch]
+verify_jwt = true
+
+[functions.generate-all-content]
+verify_jwt = true
+
+[functions.generate-master-content]
+verify_jwt = true
+
+[functions.import-master-content]
+verify_jwt = true
+
+[functions.populate-pool]
+verify_jwt = true
+
+[functions.prewarm-pool]
+verify_jwt = true
+
+[functions.prewarm-writing]
+verify_jwt = true
+
+[functions.start-prewarm]
+verify_jwt = true
+
+[functions.generate-certification-code]
+verify_jwt = true
+
+[functions.track-certification-usage]
+verify_jwt = true
+
+[functions.create-payment]
+verify_jwt = true
+
+[functions.check-subscription]
+verify_jwt = true

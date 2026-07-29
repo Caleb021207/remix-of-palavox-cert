@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { RealtimeConnection } from '@/utils/RealtimeConnection';
 import { LanguageCode } from '@/config/languages';
 import { useUILanguage } from '@/contexts/UILanguageContext';
-import { supabase } from '@/integrations/supabase/client';
+import { submitPhase } from '@/services/test/secureTestService';
 
 interface ConversationalFluencyPhaseProps {
   sessionId: string;
@@ -158,43 +158,33 @@ const ConversationalFluencyPhase: React.FC<ConversationalFluencyPhaseProps> = ({
       // Show loading state
       toast.info('Evaluating your conversation...');
 
-      // Call evaluation edge function
-      const { data, error } = await supabase.functions.invoke('evaluate-conversation', {
-        body: {
-          userMessages: userMessages.map(msg => ({
+      // Submit the raw transcript. Scoring happens server-side and the
+      // score is written to the database by the edge function, never here.
+      const result = await submitPhase({
+        sessionId,
+        phase: 'conversation',
+        responses: {
+          messages: userMessages.map(msg => ({
             content: msg.content,
             timestamp: msg.timestamp
           })),
-          duration: conversationDuration,
-          targetLanguage: 'English'
-        }
-      });
-
-      if (error) {
-        console.error('❌ Evaluation error:', error);
-        throw error;
-      }
-
-      const finalScore = data.score;
-      
-      console.log('✅ Conversation evaluation complete:', {
-        finalScore,
-        traits: data.traits,
-        stats: data.stats
+          duration: conversationDuration
+        },
+        targetLanguage: 'English'
       });
 
       cleanup();
-      
-      toast.success(`${t.test.phases['conversational-fluency'].endConversation}! Score: ${finalScore}`);
-      onComplete(finalScore);
-      
+
+      toast.success(`${t.test.phases['conversational-fluency'].endConversation}! Score: ${result.score}`);
+      onComplete(result.score);
+
     } catch (error) {
       console.error('❌ Error evaluating conversation:', error);
       cleanup();
-      toast.error('Failed to evaluate conversation');
-      onComplete(50); // Fallback score
+      toast.error(error instanceof Error ? error.message : 'Failed to evaluate conversation');
     }
   };
+
 
   const cleanup = () => {
     console.log('🧹 Cleaning up...');
