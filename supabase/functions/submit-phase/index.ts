@@ -1,6 +1,7 @@
 import { preflight, json } from "../_shared/cors.ts";
 import { getUser, serviceClient, ownsSession } from "../_shared/auth.ts";
 import { gradeAgainstKey, calculateLevel, AnswerKeyEntry } from "../_shared/grading.ts";
+import { scoreSession, mapToBand, type ScoredResponse, type CutScoreRow } from "../_shared/exam-scoring.ts";
 
 const SECTION_MAP: Record<string, string> = {
   comprehension: "reading",
